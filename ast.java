@@ -861,7 +861,14 @@ class ReadStmtNode extends StmtNode {
     }
 
     public void typeCheck() {
-      myExp.typeCheck();
+      //Read Stmts can only be int or bool expressions or String literals
+      SemSym readSymbol = myExp.sym();
+      if(readSymbol.getType().isFnType()){
+        //bad
+        ErrMsg.fatal("Attempt to read a function", readSymbol.lineNum(), readSymbol.charNum());
+      }
+      //need to also handle struct types and struct variables
+
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -889,7 +896,13 @@ class WriteStmtNode extends StmtNode {
     }
 
     public void typeCheck() {
-      myExp.typeCheck();
+      //Read Stmts can only be int or bool expressions or String literals
+      SemSym readSymbol = myExp.sym();
+      if(readSymbol.getType().isFnType()){
+        //bad
+        ErrMsg.fatal("Attempt to read a function", readSymbol.lineNum(), readSymbol.charNum());
+      }
+      //need to also handle struct types and struct variables
     }
 
     public void unparse(PrintWriter p, int indent) {
