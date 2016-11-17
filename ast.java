@@ -311,6 +311,10 @@ class ExpListNode extends ASTnode {
         myExps = S;
     }
 
+    public int getNumExps(){
+      return myExps.size();
+    }
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, process each exp in the list.
@@ -900,7 +904,7 @@ class WriteStmtNode extends StmtNode {
       SemSym readSymbol = myExp.sym();
       if(readSymbol.getType().isFnType()){
         //bad
-        ErrMsg.fatal("Attempt to read a function", readSymbol.lineNum(), readSymbol.charNum());
+        ErrMsg.fatal("Attempt to write a function", readSymbol.lineNum(), readSymbol.charNum());
       }
       //need to also handle struct types and struct variables
     }
@@ -946,7 +950,6 @@ class IfStmtNode extends StmtNode {
     }
 
     public void typeCheck(){
-      myExp.typeCheck();
 
     }
 
@@ -1130,6 +1133,11 @@ class ReturnStmtNode extends StmtNode {
         if (myExp != null) {
             myExp.nameAnalysis(symTab);
         }
+    }
+
+    public void typeCheck() {
+      //TODO: Check that the function is void/not void
+      
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1481,11 +1489,15 @@ class CallExpNode extends ExpNode {
     }
 
     public void typeCheck() {
-      SemSym functionSymbol = myId.Sym();
+      FnSym functionSymbol = (FnSym) myId.Sym();
       if(!functionSymbol.getType().isFnType()){
         ErrMsg.fatal("Attempt to call a non-function", functionSymbol.lineNum(), functionSymbol.charNum());
+      } else if(functionSymbol.getNumParams() != myExpList.getNumExps()){
+        ErrMsg.fatal("Function call with wrong number of args", functionSymbol.lineNum(), functionSymbol.charNum());
+      } else{
+        //TODO: check if params are of the correct type as the formals for the functionSymbol, report each one that is wrong
+
       }
-      //also need to check if correct number of params are called
     }
 
     // ** unparse **
