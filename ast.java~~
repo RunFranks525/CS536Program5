@@ -954,6 +954,14 @@ class IfStmtNode extends StmtNode {
     }
 
     public void typeCheck(){
+<<<<<<< HEAD
+	SemSym expSym = myExp.sym();
+	Type expType = expSym.getType();
+	if(!expType.isBoolType())
+		ErrMsg.fatal("Non-bool expression used as an if condition",myExp.lineNum(), myExp.charNum());
+	myExp().checkType();
+	myStmtList.checkType();
+=======
 //	We know this is maybe fucked up.
 	if(myExp instanceof NotNode){
 
@@ -979,6 +987,7 @@ class IfStmtNode extends StmtNode {
 	}	
 	myExp().typeCheck();
 	myStmtList.typeCheck();
+>>>>>>> did our bullshit boolean-checking in the IfStmtNode
     }
 
     public void unparse(PrintWriter p, int indent) {

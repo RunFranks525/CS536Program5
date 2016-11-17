@@ -954,12 +954,31 @@ class IfStmtNode extends StmtNode {
     }
 
     public void typeCheck(){
-	SemSym expSym = myExp.sym();
-	Type expType = expSym.getType();
-	if(!expType.isBoolType())
-		ErrMsg.fatal("Non-bool expression used as an if condition",myExp.lineNum(), myExp.charNum());
-	myExp().checkType();
-	myStmtList.checkType();
+//	We know this is maybe fucked up.
+	if(myExp instanceof NotNode){
+
+	} else if(myExp instanceof AndNode){
+	
+	} else if(myExp instanceof OrNode){
+
+	} else if(myExp instanceof EqualsNode){
+
+	} else if(myExp instanceof NotEqualsNode){
+
+	} else if(myExp instanceof LessNode){
+
+	} else if(myExp instanceof GreaterNode){
+
+	} else if(myExp instanceof LessEqNode){
+
+	} else if(myExp instanceof GreaterEqNode){
+
+	} else{
+		ErrMsg.fatal("Non-bool expression used as an if condition",myExp.lineNum(), myExp.charNum());  //note that we can't access lineNum() and charNum() from an ExpNode
+
+	}	
+	myExp().typeCheck();
+	myStmtList.typeCheck();
     }
 
     public void unparse(PrintWriter p, int indent) {
