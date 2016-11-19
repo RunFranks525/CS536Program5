@@ -1985,6 +1985,28 @@ class EqualsNode extends BinaryExpNode {
 	      return new ErrorType();
       }
 
+      if(lhsType.isStructType() && rhsType.isStructType()){
+        ErrMsg.fatal("Equality operator applied to struct variables", myExp1.lineNum(), myExp2.charNum());
+	      return new ErrorType();
+      }  else if (!lhsSym.getType().isStructType()) {
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
+	       return new ErrorType();
+      } else {
+        ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
+	      return new ErrorType();
+      }
+
+      if(lhsType.isStructDefType() && rhsType.isStructDefType()){
+        ErrMsg.fatal("Equality operator applied to struct names", myExp1.lineNum(), myExp2.charNum());
+	      return new ErrorType();
+      }  else if (!lhsSym.getType().isStructDefType()) {
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
+	       return new ErrorType();
+      } else {
+        ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
+	      return new ErrorType();
+      }
+
       if(lhsType.isBoolType() && rhsType.isBoolType()){
         BinaryExpressionType binaryExpressionType = new BinaryExpressionType();
         binaryExpressionType.setExpressionType(new BoolType());
@@ -2034,10 +2056,33 @@ class NotEqualsNode extends BinaryExpNode {
           ErrMsg.fatal("Equality operator applied to functions", myExp1.lineNum(), myExp1.charNum());
         }
       } else if (!lhsSym.getType().isFnType()) {
-        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());	      return new ErrorType();
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
+        return new ErrorType();
       } else {
         ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
         return new ErrorType();
+      }
+
+      if(lhsType.isStructType() && rhsType.isStructType()){
+        ErrMsg.fatal("Equality operator applied to struct variables", myExp1.lineNum(), myExp2.charNum());
+	      return new ErrorType();
+      }  else if (!lhsSym.getType().isStructType()) {
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
+	       return new ErrorType();
+      } else {
+        ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
+	      return new ErrorType();
+      }
+
+      if(lhsType.isStructDefType() && rhsType.isStructDefType()){
+        ErrMsg.fatal("Equality operator applied to struct names", myExp1.lineNum(), myExp2.charNum());
+	      return new ErrorType();
+      }  else if (!lhsSym.getType().isStructDefType()) {
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
+	       return new ErrorType();
+      } else {
+        ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
+	      return new ErrorType();
       }
 
       if(lhsType.isBoolType() && rhsType.isBoolType()){
