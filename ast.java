@@ -260,8 +260,17 @@ class FnBodyNode extends ASTnode {
         myStmtList.nameAnalysis(symTab);
     }
 
-    public void typeCheck(){
-      myStmtList.typeCheck();
+    public void typeCheck(SemSym fnSym){
+      StmtNode returnStmt = myStmtList.typeCheck();
+      Type returnStmtType = returnStmt.typeCheck();
+      if(returnStmtType == null && !fnSym.getReturnType().isVoidType()) {
+        ErrMsg.fatal("Missing return value", 0,0);
+      } else if (returnStmtType != null && fnSym.getReturnType().isVoidType()){
+        ErrMsg.fatal("Return with a value in a void function", returnStmt.lineNum(), returnStmt.charNum());
+      }
+      if(!fnSym.getReturnType().equals(returnStmtType){
+        ErrMsg.fatal("Bad return value", returnStmt.lineNum(), returnStmt.charNum());
+      }
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -289,10 +298,12 @@ class StmtListNode extends ASTnode {
         }
     }
 
-    public void typeCheck() {
+    public StmtNode typeCheck() {
+      StmtNode returnStmt = null;
       for (StmtNode node: myStmts){
         node.typeCheck();
       }
+      returnStmt = myStmts.getLast();
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -316,7 +327,7 @@ class ExpListNode extends ASTnode {
     }
 
     public List<ExpNode> getExps(){
-	return myExps;
+	    return myExps;
     }
 
     /**
@@ -529,6 +540,11 @@ class FnDeclNode extends DeclNode {
         }
 
         return null;
+    }
+
+    public void typeCheck(){
+      SemSym functionSym = myId.sym();
+      myBody.typeCheck(functionSym);
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -766,6 +782,8 @@ class StructNode extends TypeNode {
 abstract class StmtNode extends ASTnode {
     abstract public void nameAnalysis(SymTable symTab);
     abstract public void typeCheck();
+    public int lineNum(){ return 0; }
+    public int charNum(){ return 0; }
 }
 
 class AssignStmtNode extends StmtNode {
@@ -881,9 +899,15 @@ class ReadStmtNode extends StmtNode {
         return new ErrorType();
       }
       if(expType.isFnType()){
-        //TODO: Attempt to read a function
+        //TODO: Attempt to read a function, check this
         //is it a function call expression or is it a function symbol?
-
+        if(exp instanceof CallExpNode){
+          if(myExp.sym().getReturnType().isVoidType()){
+            ErrMsg.fatal("Attempt to read void", myExp.lineNum(), myExp.charNum());
+          }
+        } else {
+          ErrMsg.fatal("Attempt to read a function", myExp.lineNum(), myExp.charNum());
+        }
       } else if (expType.isStructDefType()){
         ErrMsg.fatal("Attempt to write a struct name", myExp.lineNume(), myExp.charNum());
         return new ErrorType();
@@ -927,7 +951,13 @@ class WriteStmtNode extends StmtNode {
         return new ErrorType();
       }
       if(expType.isFnType()){
-        //TODO: Attempt to write a function
+        if(expType.isFnType()){
+          //TODO: Attempt to write a function, check this
+          //is it a function call expression or is it a function symbol?
+          if(exp !instanceof CallExpNode){
+            ErrMsg.fatal("Attempt to write a function", myExp.lineNum(), myExp.charNum());
+          }
+        }
 
       } else if (expType.isStructDefType()){
         ErrMsg.fatal("Attempt to write a struct name", myExp.lineNume(), myExp.charNum());
@@ -1194,9 +1224,16 @@ class ReturnStmtNode extends StmtNode {
         }
     }
 
-    public void typeCheck() {
-      //TODO: Check that the function is void/not void
+    public Type typeCheck() {
+      return myExp.typeCheck();
+    }
 
+    public int lineNum() {
+      return myExp.lineNum();
+    }
+
+    public int charNum() {
+      return myExp.charNum();
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1931,6 +1968,23 @@ class EqualsNode extends BinaryExpNode {
 
       if(lhsType.isErrorType() || rhsType.isErrorType()) return new ErrorType();
 
+      if(lhsType.isFnType() && rhsType.isFnType()){
+        if(lhsType instanceof CallExpNode && rhsType instanceof CallExpNode){
+          SemSym exp1Sym = exp1.sym();
+          SemSym exp2Sym = exp2.sym();
+          if(exp1Sym.getReturnType().isVoidType() || exp2Sym.getReturnType().isVoidType()){
+            ErrMsg.fatal("Equality operator applied to void functions", myExp1.lineNum(), myExp1.charNum());
+          }
+        } else {
+          ErrMsg.fatal("Equality operator applied to functions", myExp1.lineNum(), myExp1.charNum());
+        }
+      } else if (!lhsSym.getType().isFnType()) {
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());	      return new ErrorType();
+      } else {
+        ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
+	      return new ErrorType();
+      }
+
       if(lhsType.isBoolType() && rhsType.isBoolType()){
         BinaryExpressionType binaryExpressionType = new BinaryExpressionType();
         binaryExpressionType.setExpressionType(new BoolType());
@@ -1968,6 +2022,23 @@ class NotEqualsNode extends BinaryExpNode {
       Type rhsType = myExp2.typeCheck();
 
       if(lhsType.isErrorType() || rhsType.isErrorType()) return new ErrorType();
+
+      if(lhsType.isFnType() && rhsType.isFnType()){
+        if(lhsType instanceof CallExpNode && rhsType instanceof CallExpNode){
+          SemSym exp1Sym = exp1.sym();
+          SemSym exp2Sym = exp2.sym();
+          if(exp1Sym.getReturnType().isVoidType() || exp2Sym.getReturnType().isVoidType()){
+            ErrMsg.fatal("Equality operator applied to void functions", myExp1.lineNum(), myExp1.charNum());
+          }
+        } else {
+          ErrMsg.fatal("Equality operator applied to functions", myExp1.lineNum(), myExp1.charNum());
+        }
+      } else if (!lhsSym.getType().isFnType()) {
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());	      return new ErrorType();
+      } else {
+        ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
+        return new ErrorType();
+      }
 
       if(lhsType.isBoolType() && rhsType.isBoolType()){
         BinaryExpressionType binaryExpressionType = new BinaryExpressionType();
