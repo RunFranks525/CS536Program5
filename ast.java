@@ -1215,6 +1215,16 @@ abstract class ExpNode extends ASTnode {
      * Default version for nodes with no names
      */
     public void nameAnalysis(SymTable symTab) { }
+
+    public Type typeCheck() { }
+
+    public int lineNum() {
+	return 0;
+    }
+
+    public int charNum() {
+	return 0;
+    }
 }
 
 class IntLitNode extends ExpNode {
@@ -1228,6 +1238,9 @@ class IntLitNode extends ExpNode {
         p.print(myIntVal);
     }
 
+    public Type typeCheck(){
+	return new IntType();
+    }
     private int myLineNum;
     private int myCharNum;
     private int myIntVal;
@@ -1244,6 +1257,9 @@ class StringLitNode extends ExpNode {
         p.print(myStrVal);
     }
 
+    public Type typeCheck(){
+	return new StringType();
+    }
     private int myLineNum;
     private int myCharNum;
     private String myStrVal;
@@ -1259,6 +1275,10 @@ class TrueNode extends ExpNode {
         p.print("true");
     }
 
+    public Type typeCheck(){
+	return new BoolType();
+    }
+
     private int myLineNum;
     private int myCharNum;
 }
@@ -1271,6 +1291,10 @@ class FalseNode extends ExpNode {
 
     public void unparse(PrintWriter p, int indent) {
         p.print("false");
+    }
+
+    public Type typeCheck(){
+	return new BoolType();
     }
 
     private int myLineNum;
@@ -1332,6 +1356,10 @@ class IdNode extends ExpNode {
         } else {
             link(sym);
         }
+    }
+
+    public Type typeCheck(){
+	return mySym.getType();
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1470,6 +1498,13 @@ class DotAccessExpNode extends ExpNode {
                 }
             }
         }
+    }
+
+    public Type typeCheck(){
+
+	Type locType = myLoc.typeCheck();
+
+	return myId.typeCheck();
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1623,6 +1658,7 @@ class UnaryMinusNode extends UnaryExpNode {
     }
 
     public void typeCheck(){
+	//TODO: check this and correct
       SemSym unaryExpSym = myExp.sym();
       if(!unaryExpSym.getType().isIntType()){
         ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", unaryExpSym.lineNum(), unaryExpSym.charNum());
@@ -1675,16 +1711,22 @@ class PlusNode extends BinaryExpNode {
         p.print(")");
     }
 
-    public void typeCheck(){
+    public Type typeCheck(){
       //Do type checking here for ints
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if(lhsSym.getType().isIntType() && rhsSym.getType().isIntType()){
-
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+  
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+  
+      if(lhsType.isIntType() && rhsType.isIntType()){
+	return new IntType();
       } else if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", lhsSym.lineNum(), lhsSym.charNum());
+        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
       } else {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", rhsSym.lineNum(), rhsSym.charNum());
+        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 }
@@ -1694,16 +1736,22 @@ class MinusNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
+    public Type typeCheck(){
       //Do type checking here for ints
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if(lhsSym.getType().isIntType() && rhsSym.getType().isIntType()){
-
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+  
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+  
+      if(lhsType.isIntType() && rhsType.isIntType()){
+	return new IntType();
       } else if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", lhsSym.lineNum(), lhsSym.charNum());
+        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
       } else {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", rhsSym.lineNum(), rhsSym.charNum());
+        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1721,16 +1769,22 @@ class TimesNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck() {
+    public Type typeCheck(){
       //Do type checking here for ints
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if(lhsSym.getType().isIntType() && rhsSym.getType().isIntType()){
-
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+  
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+  
+      if(lhsType.isIntType() && rhsType.isIntType()){
+	return new IntType();
       } else if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", lhsSym.lineNum(), lhsSym.charNum());
+        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
       } else {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", rhsSym.lineNum(), rhsSym.charNum());
+        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1748,16 +1802,22 @@ class DivideNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
+    public Type typeCheck(){
       //Do type checking here for ints
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if(lhsSym.getType().isIntType() && rhsSym.getType().isIntType()){
-
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+  
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+  
+      if(lhsType.isIntType() && rhsType.isIntType()){
+	return new IntType();
       } else if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", lhsSym.lineNum(), lhsSym.charNum());
+        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
       } else {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", rhsSym.lineNum(), rhsSym.charNum());
+        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1775,16 +1835,23 @@ class AndNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
-      //Do type checking here for logicals
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if(lhsSym.getType().isBoolType() && rhsSym.getType().isBoolType()){
 
+    public Type typeCheck(){
+      //Do type checking here for ints
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+
+      if(lhsType.isBoolType() && rhsType.isBoolType()){
+	return new BoolType();
       } else if (!lhsSym.getType().isBoolType()) {
-        ErrMsg.fatal("Logical operator applied to non-bool operand", lhsSym.lineNum(), lhsSym.charNum());
+        ErrMsg.fatal("Logical operator applied to non-bool operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
       } else {
-        ErrMsg.fatal("Logical operator applied to non-bool operand", rhsSym.lineNum(), rhsSym.charNum());
+        ErrMsg.fatal("Logical operator applied to non-bool operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1802,16 +1869,22 @@ class OrNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
-      //Do type checking here for logicals
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if(lhsSym.getType().isBoolType() && rhsSym.getType().isBoolType()){
+    public Type typeCheck(){
+      //Do type checking here for ints
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
 
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+
+      if(lhsType.isBoolType() && rhsType.isBoolType()){
+	return new BoolType();
       } else if (!lhsSym.getType().isBoolType()) {
-        ErrMsg.fatal("Logical operator applied to non-bool operand", lhsSym.lineNum(), lhsSym.charNum());
+        ErrMsg.fatal("Logical operator applied to non-bool operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
       } else {
-        ErrMsg.fatal("Logical operator applied to non-bool operand", rhsSym.lineNum(), rhsSym.charNum());
+        ErrMsg.fatal("Logical operator applied to non-bool operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1829,12 +1902,19 @@ class EqualsNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
-      //Do type checking here ints or logicals, need to consider further, maybe just check that the two are of the same type
-      SemSym lhsSymbol = myExp1.sym();
-      SemSym rhsSymbol = myExp2.sym();
-      if(!lhsSymbol.getType().equals(rhsSymbol.getType())) {
-	ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp2.lineNum());
+    public Type typeCheck(){
+      //Do type checking here for ints
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+
+      if(lhsType == rhsType){
+	return new BoolType();
+      } else {
+    	ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1852,12 +1932,19 @@ class NotEqualsNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
-      //Do type checking here ints or logicals, need to consider further, maybe just check that the two are of the same type
-      SemSym lhsSymbol = myExp1.sym();
-      SemSym rhsSymbol = myExp2.sym();
-      if(!lhsSymbol.getType().equals(rhsSymbol.getType())) {
-	ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp2.lineNum());
+    public Type typeCheck(){
+      //Do type checking here for ints
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+
+      if(lhsType == rhsType){
+	return new BoolType();
+      } else {
+    	ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1875,14 +1962,22 @@ class LessNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
-      //Do type checking here ints
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Relational operator applied to non-numeric operand", lhsSym.lineNum(), lhsSym.charNum());
-      } else if(!rhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Relational operator applied to non-numeric operand", rhsSym.lineNum(), rhsSym.charNum());
+    public Type typeCheck(){
+      //Do type checking here for ints
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+  
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+  
+      if(lhsType.isIntType() && rhsType.isIntType()){
+	return new BoolType();
+      } else if (!lhsSym.getType().isIntType()) {
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
+      } else {
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1900,14 +1995,22 @@ class GreaterNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
-      //Do type checking here ints
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Relational operator applied to non-numeric operand", lhsSym.lineNum(), lhsSym.charNum());
-      } else if(!rhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Relational operator applied to non-numeric operand", rhsSym.lineNum(), rhsSym.charNum());
+    public Type typeCheck(){
+      //Do type checking here for ints
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+  
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+  
+      if(lhsType.isIntType() && rhsType.isIntType()){
+	return new BoolType();
+      } else if (!lhsSym.getType().isIntType()) {
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
+      } else {
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1925,14 +2028,22 @@ class LessEqNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
-      //Do type checking here ints
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Relational operator applied to non-numeric operand", lhsSym.lineNum(), lhsSym.charNum());
-      } else if(!rhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Relational operator applied to non-numeric operand", rhsSym.lineNum(), rhsSym.charNum());
+    public Type typeCheck(){
+      //Do type checking here for ints
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+  
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+  
+      if(lhsType.isIntType() && rhsType.isIntType()){
+	return new BoolType();
+      } else if (!lhsSym.getType().isIntType()) {
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
+      } else {
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
@@ -1950,14 +2061,22 @@ class GreaterEqNode extends BinaryExpNode {
         super(exp1, exp2);
     }
 
-    public void typeCheck(){
-      //Do type checking here ints
-      SemSym lhsSym = exp1.sym();
-      SemSym rhsSym = exp2.sym();
-      if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Relational operator applied to non-numeric operand", lhsSym.lineNum(), lhsSym.charNum());
-      } else if(!rhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Relational operator applied to non-numeric operand", rhsSym.lineNum(), rhsSym.charNum());
+    public Type typeCheck(){
+      //Do type checking here for ints
+      Type lhsType = myExp1.typeCheck();
+      Type rhsType = myExp2.typeCheck();
+  
+      if(lhsType.isErrorType() || rhsType.isErrorType())
+	return new ErrorType();
+  
+      if(lhsType.isIntType() && rhsType.isIntType()){
+	return new BoolType();
+      } else if (!lhsSym.getType().isIntType()) {
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+	return new ErrorType();
+      } else {
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+	return new ErrorType();
       }
     }
 
