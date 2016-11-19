@@ -882,6 +882,7 @@ class ReadStmtNode extends StmtNode {
       }
       if(expType.isFnType()){
         //TODO: Attempt to read a function
+        //is it a function call expression or is it a function symbol?
 
       } else if (expType.isStructDefType()){
         ErrMsg.fatal("Attempt to write a struct name", myExp.lineNume(), myExp.charNum());
