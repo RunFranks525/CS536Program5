@@ -1,5 +1,5 @@
 /**
- * Type class and its subclasses: 
+ * Type class and its subclasses:
  * ErrorType, IntType, BoolType, VoidType, StringType, FnType, StructType,
  */
 abstract public class Type {
@@ -34,7 +34,7 @@ abstract public class Type {
     public boolean isVoidType() {
         return false;
     }
-    
+
     public boolean isStringType() {
         return false;
     }
@@ -46,9 +46,13 @@ abstract public class Type {
     public boolean isStructType() {
         return false;
     }
-    
+
     public boolean isStructDefType() {
         return false;
+    }
+
+    public boolean isBinaryExpressionType(){
+      return false;
     }
 }
 
@@ -165,11 +169,11 @@ class FnType extends Type {
 // **********************************************************************
 class StructType extends Type {
     private IdNode myId;
-    
+
     public StructType(IdNode id) {
         myId = id;
     }
-    
+
     public boolean isStructType() {
         return true;
     }
@@ -199,4 +203,32 @@ class StructDefType extends Type {
     public String toString() {
         return "struct";
     }
+}
+
+// **********************************************************************
+// ExpressionType
+// **********************************************************************
+class BinaryExpressionType extends Type{
+
+  private Type expressionType;
+
+  public boolean isBinaryExpressionType() {
+    return true;
+  }
+
+  public Type setExpressionType(Type expressionType){
+    this.expressionType = expressionType;
+  }
+
+  public Type getExpressionType(){
+    return this.expressionType;
+  }
+
+  public boolean equals(Type t) {
+    return t.isBinaryExpressionType();
+  }
+
+  public string toString() {
+    return "BinaryExpression";
+  }
 }
