@@ -883,9 +883,14 @@ class ReadStmtNode extends StmtNode {
       if(expType.isFnType()){
         //TODO: Attempt to read a function
 
+      } else if (expType.isStructDefType()){
+        ErrMsg.fatal("Attempt to write a struct name", myExp.lineNume(), myExp.charNum());
+        return new ErrorType();
       } else if (expType.isStructType()){
-        //TODO: Attempt to read a struct name
-        //TODO: Attempt to read a struct variable
+        ErrMsg.fatal("Attempt to write a struct variable", myExp.lineNume(), myExp.charNum());
+        return new ErrorType();
+      } else {
+        return new ErrorType();
       }
 
     }
@@ -923,9 +928,14 @@ class WriteStmtNode extends StmtNode {
       if(expType.isFnType()){
         //TODO: Attempt to write a function
 
+      } else if (expType.isStructDefType()){
+        ErrMsg.fatal("Attempt to write a struct name", myExp.lineNume(), myExp.charNum());
+        return new ErrorType();
       } else if (expType.isStructType()){
-        //TODO: Attempt to write a struct name
-        //TODO: Attempt to write a struct variable
+        ErrMsg.fatal("Attempt to write a struct variable", myExp.lineNume(), myExp.charNum());
+        return new ErrorType();
+      } else {
+        return new ErrorType();
       }
     }
 
@@ -969,9 +979,16 @@ class IfStmtNode extends StmtNode {
       }
     }
 
-    public void checkType() {
-      //TODO: check that if expression is a logical expression
+    public void typeCheck() {
+      Type ifExpType = myExp.typeCheck();
+      if(ifExpType.isErrorType()){
+        return new ErrorType();
+      }
 
+      if(!ifExpType.getExpressionType().isBoolType()){
+        ErrMsg.fatal("Non-bool expression used as an if condition", myExp.lineNum(), myExp.charNum());
+        return new ErrorType();
+      }
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1038,8 +1055,15 @@ class IfElseStmtNode extends StmtNode {
     }
 
     public void typeCheck() {
-      //TODO: Check that if expression is a logical expression
+      Type ifElseExpType = myExp.typeCheck();
+      if(ifElseExpType.isErrorType()){
+        return new ErrorType();
+      }
 
+      if(!ifElseExpType.getExpressionType().isBoolType()){
+        ErrMsg.fatal("Non-bool expression used as an if condition", myExp.lineNum(), myExp.charNum());
+        return new ErrorType();
+      }
     }
 
 
@@ -1076,7 +1100,15 @@ class WhileStmtNode extends StmtNode {
     }
 
     public void typeCheck() {
-      //TODO: check that while expression is a logical expression
+      Type whileExpType = myExp.typeCheck();
+      if(whileExpType.isErrorType()){
+        return new ErrorType();
+      }
+
+      if(!whileExpType.getExpressionType().isBoolType()){
+        ErrMsg.fatal("Non-bool expression used as a while condition", myExp.lineNum(), myExp.charNum());
+        return new ErrorType();
+      }
     }
 
     /**
@@ -1193,11 +1225,11 @@ abstract class ExpNode extends ASTnode {
     public Type typeCheck() { }
 
     public int lineNum() {
-	return 0;
+	    return 0;
     }
 
     public int charNum() {
-	return 0;
+	    return 0;
     }
 }
 
@@ -1213,7 +1245,7 @@ class IntLitNode extends ExpNode {
     }
 
     public Type typeCheck(){
-	return new IntType();
+	    return new IntType();
     }
     private int myLineNum;
     private int myCharNum;
@@ -1232,7 +1264,7 @@ class StringLitNode extends ExpNode {
     }
 
     public Type typeCheck(){
-	return new StringType();
+	    return new StringType();
     }
     private int myLineNum;
     private int myCharNum;
@@ -1250,7 +1282,7 @@ class TrueNode extends ExpNode {
     }
 
     public Type typeCheck(){
-	return new BoolType();
+	    return new BoolType();
     }
 
     private int myLineNum;
@@ -1268,7 +1300,7 @@ class FalseNode extends ExpNode {
     }
 
     public Type typeCheck(){
-	return new BoolType();
+	    return new BoolType();
     }
 
     private int myLineNum;
@@ -1333,7 +1365,7 @@ class IdNode extends ExpNode {
     }
 
     public Type typeCheck(){
-	return mySym.getType();
+	     return mySym.getType();
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1475,10 +1507,8 @@ class DotAccessExpNode extends ExpNode {
     }
 
     public Type typeCheck(){
-
-	Type locType = myLoc.typeCheck();
-
-	return myId.typeCheck();
+	    Type locType = myLoc.typeCheck();
+	    return myId.typeCheck();
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1511,11 +1541,8 @@ class AssignNode extends ExpNode {
     }
 
     public void typeCheck() {
-      SemSym lhsSymbol = myLhs.sym();
-      SemSym rhsSymbol = myExp.sym();
-      if(!lhsSymbol.getType().equals(rhsSymbol.getType())) {
-	ErrMsg.fatal("Type mismatch", myLhs.lineNum(), myExp.lineNum());
-      }
+      //TODO: implement this
+
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1559,13 +1586,13 @@ class CallExpNode extends ExpNode {
       } else if(functionSymbol.getNumParams() != myExpList.getNumExps()){
         ErrMsg.fatal("Function call with wrong number of args", functionSymbol.lineNum(), functionSymbol.charNum());
       } else{
-	for(int i = 0; i < myExpList.getNumExps(); i++) {
-	    ExpNode currExp = myExpList.get(i);
-	    Type currType = functionSymbol.getParamTypes(i);
-	    if(!currExp.sym().getType().equals(currType){
-        	ErrMsg.fatal("Type of actual does not match type of formal", currExp.lineNum(), currExp.charNum());
-	    }
-	}
+	       for(int i = 0; i < myExpList.getNumExps(); i++) {
+	          ExpNode currExp = myExpList.get(i);
+	          Type currType = functionSymbol.getParamTypes(i);
+	          if(!currExp.sym().getType().equals(currType){
+        	     ErrMsg.fatal("Type of actual does not match type of formal", currExp.lineNum(), currExp.charNum());
+	        }
+	      }
       }
     }
 
@@ -1589,7 +1616,9 @@ abstract class UnaryExpNode extends ExpNode {
         myExp = exp;
     }
 
-    public Bo
+    public Type typeCheck() {
+      return null;
+    }
 
     /**
      * nameAnalysis
@@ -1895,7 +1924,7 @@ class EqualsNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-      //Do type checking here for ints
+      //Do type checking here for equality --> type mismatch, functions return values, and if comparing functions themselves
       Type lhsType = myExp1.typeCheck();
       Type rhsType = myExp2.typeCheck();
 
@@ -1905,11 +1934,15 @@ class EqualsNode extends BinaryExpNode {
         BinaryExpressionType binaryExpressionType = new BinaryExpressionType();
         binaryExpressionType.setExpressionType(new BoolType());
 	      return binaryExpressionType;
+      } else if (lhsType.isIntType() && rhsType.isIntType()){
+        BinaryExpressionType binaryExpressionType = new BinaryExpressionType();
+        binaryExpressionType.setExpressionType(new IntType());
+	      return binaryExpressionType;
       } else if (!lhsSym.getType().isBoolType()) {
-        ErrMsg.fatal("Logical operator applied to non-bool operand", myExp1.lineNum(), myExp1.charNum());
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
 	       return new ErrorType();
       } else {
-        ErrMsg.fatal("Logical operator applied to non-bool operand", myExp2.lineNum(), myExp2.charNum());
+        ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
 	      return new ErrorType();
       }
     }
@@ -1929,7 +1962,7 @@ class NotEqualsNode extends BinaryExpNode {
     }
 
     public Type typeCheck(){
-      //Do type checking here for ints
+      //Do type checking here for equality --> type mismatch, functions return values, and if comparing functions themselves
       Type lhsType = myExp1.typeCheck();
       Type rhsType = myExp2.typeCheck();
 
@@ -1939,11 +1972,15 @@ class NotEqualsNode extends BinaryExpNode {
         BinaryExpressionType binaryExpressionType = new BinaryExpressionType();
         binaryExpressionType.setExpressionType(new BoolType());
 	      return binaryExpressionType;
+      } else if (lhsType.isIntType() && rhsType.isIntType()){
+        BinaryExpressionType binaryExpressionType = new BinaryExpressionType();
+        binaryExpressionType.setExpressionType(new IntType());
+	      return binaryExpressionType;
       } else if (!lhsSym.getType().isBoolType()) {
-        ErrMsg.fatal("Logical operator applied to non-bool operand", myExp1.lineNum(), myExp1.charNum());
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
 	       return new ErrorType();
       } else {
-        ErrMsg.fatal("Logical operator applied to non-bool operand", myExp2.lineNum(), myExp2.charNum());
+        ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
 	      return new ErrorType();
       }
     }
@@ -1974,10 +2011,10 @@ class LessNode extends BinaryExpNode {
          binaryExpressionType.setExpressionType(new IntType());
 	       return binaryExpressionType;
       } else if (!lhsSym.getType().isIntType()) {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp1.lineNum(), myExp1.charNum());
 	       return new ErrorType();
       } else {
-        ErrMsg.fatal("Arithmetic operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
+        ErrMsg.fatal("Relational operator applied to non-numeric operand", myExp2.lineNum(), myExp2.charNum());
 	       return new ErrorType();
       }
     }
