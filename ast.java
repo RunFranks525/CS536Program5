@@ -1579,7 +1579,17 @@ class AssignNode extends ExpNode {
     }
 
     public void typeCheck() {
-      //TODO: implement this
+      Type lhsType = myLhs.sym().getType();
+      Type rhsType = myExp.typeCheck();
+
+      if(!rhsType.isErrorType()){
+        if(lhsType.isFnType()){
+          ErrMsg.fatal("Function assignment");
+        }
+        if(rhsType.isSt)
+      }
+
+
 
     }
 
@@ -1979,7 +1989,8 @@ class EqualsNode extends BinaryExpNode {
           ErrMsg.fatal("Equality operator applied to functions", myExp1.lineNum(), myExp1.charNum());
         }
       } else if (!lhsSym.getType().isFnType()) {
-        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());	      return new ErrorType();
+        ErrMsg.fatal("Type mismatch", myExp1.lineNum(), myExp1.charNum());
+        return new ErrorType();
       } else {
         ErrMsg.fatal("Type mismatch", myExp2.lineNum(), myExp2.charNum());
 	      return new ErrorType();
