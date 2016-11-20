@@ -1705,12 +1705,12 @@ class CallExpNode extends ExpNode {
       if(!idType.isFnType()) {
         ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Attempt to call a non-function");
       } else if (idSym.getNumParams() != myExpList.getNumParams()){
-        ErrMsg.fatal(functionSymbol.lineNum(), functionSymbol.charNum(), "Function call with wrong number of args");
+        ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Function call with wrong number of args");
       } else {
-        isSym = (FnSym) idSym;
-        List<Type> fnParams = idSym.getParamTypes();
-        for(int i = 0; i < idSym.getNumParams(); i++){
-	        ExpNode currExp = myExpList.getExpAtIndex(i);
+        FnSym fnIdSym = (FnSym) idSym;
+        List<Type> fnParams = fnIdSym.getParamTypes();
+        for(int i = 0; i < fnIdSym.getNumParams(); i++){
+	  ExpNode currExp = myExpList.getExpAtIndex(i);
           Type currentFnFormalType = fnParams.get(i);
           Type currentCallActualType = myExpList.getExpAtIndex(i).typeCheck();
           if(!currentFnFormalType.equals(currentCallActualType)){
