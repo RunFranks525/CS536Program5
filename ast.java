@@ -177,7 +177,7 @@ class DeclListNode extends ASTnode {
     }
 
     public void typeCheck(){
-      
+
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1658,7 +1658,7 @@ class AssignNode extends ExpNode {
 	else{
 	  return rhsType;
 	}
-       
+
       }
 
 
@@ -1704,17 +1704,18 @@ class CallExpNode extends ExpNode {
       SemSym idSym = myId.sym();
       if(!idType.isFnType()) {
         ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Attempt to call a non-function");
-      } else if (idSym.getNumParams() != myExpList.getNumParams()){
-        ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Function call with wrong number of args");
       } else {
         FnSym fnIdSym = (FnSym) idSym;
-        List<Type> fnParams = fnIdSym.getParamTypes();
-        for(int i = 0; i < fnIdSym.getNumParams(); i++){
-	  ExpNode currExp = myExpList.getExpAtIndex(i);
-          Type currentFnFormalType = fnParams.get(i);
-          Type currentCallActualType = myExpList.getExpAtIndex(i).typeCheck();
-          if(!currentFnFormalType.equals(currentCallActualType)){
-            ErrMsg.fatal(currExp.lineNum(), currExp.charNum(), "Type of actual does not match type of formal");
+        if (fnIdSym.getNumParams() != myExpList.getNumExps()){
+          ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Function call with wrong number of args");
+        } else {
+          List<Type> fnParams = fnIdSym.getParamTypes();
+          for(int i = 0; i < fnIdSym.getNumParams(); i++){
+	           ExpNode currExp = myExpList.getExpAtIndex(i);
+             Type currentFnFormalType = fnParams.get(i);
+             Type currentCallActualType = myExpList.getExpAtIndex(i).typeCheck();
+             if(!currentFnFormalType.equals(currentCallActualType)){
+               ErrMsg.fatal(currExp.lineNum(), currExp.charNum(), "Type of actual does not match type of formal");
           }
         }
       }
