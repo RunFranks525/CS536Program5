@@ -270,7 +270,14 @@ class FnBodyNode extends ASTnode {
         ErrMsg.fatal("Missing return value", 0,0);
       } else if (returnStmtType != null && fnSym.getReturnType().isVoidType()){
         ErrMsg.fatal("Return with a value in a void function", returnStmt.lineNum(), returnStmt.charNum());
+<<<<<<< HEAD
       }*/
+=======
+      }
+      if(!fnSym.getReturnType().equals(returnStmtType)){
+        ErrMsg.fatal("Bad return value", returnStmt.lineNum(), returnStmt.charNum());
+      }
+>>>>>>> merging stuff
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -347,6 +354,10 @@ class ExpListNode extends ASTnode {
 
     public List<ExpNode> getExps(){
 	    return myExps;
+    }
+
+    public Type getExpAtIndex(int i) {
+      return myExps.get(i);
     }
 
     /**
@@ -1668,19 +1679,21 @@ class CallExpNode extends ExpNode {
     }
 
     public void typeCheck() {
-      FnSym functionSymbol = (FnSym) myId.Sym();
-      if(!functionSymbol.getType().isFnType()){
-        ErrMsg.fatal("Attempt to call a non-function", functionSymbol.lineNum(), functionSymbol.charNum());
-      } else if(functionSymbol.getNumParams() != myExpList.getNumExps()){
+      Type idType = myId.typeCheck();
+      SemSym idSym = myId.sym();
+      if(!idType.isFnType()) {
+        ErrMsg.fatal("Attempt to call a non-function", myId.lineNum(), myId.charNum());
+      } else if (idSym.getNumParams() != myExpList.getNumParams()){
         ErrMsg.fatal("Function call with wrong number of args", functionSymbol.lineNum(), functionSymbol.charNum());
-      } else{
-	       for(int i = 0; i < myExpList.getNumExps(); i++) {
-	          ExpNode currExp = myExpList.get(i);
-	          Type currType = functionSymbol.getParamTypes(i);
-	          if(!currExp.sym().getType().equals(currType){
-        	     ErrMsg.fatal("Type of actual does not match type of formal", currExp.lineNum(), currExp.charNum());
-	        }
-	      }
+      } else {
+        List<Type> fnParams = idSym.getParamTypes();
+        for(int i = 0; i < idSym.getNumParams(); i++){
+          Type currentFnFormalType = fnParams.get(i);
+          Type currentCallActualType = myExpList.getExpAtIndex(i);
+          if(!currentFnFormalType.equals(currentCallActualType)){
+            ErrMsg.fatal("Type of actual does not match type of formal", currExp.lineNum(), currExp.charNum());
+          }
+        }
       }
     }
 
