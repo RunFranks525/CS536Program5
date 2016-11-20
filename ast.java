@@ -865,7 +865,7 @@ class PostIncStmtNode extends StmtNode {
         return new ErrorType();
       }
       if(!expType.isIntType()){
-        ErrMsg.Fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operand");
+        ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operand");
       }
 
       return null;
@@ -900,7 +900,7 @@ class PostDecStmtNode extends StmtNode {
         return new ErrorType();
       }
       if(!expType.isIntType()){
-        ErrMsg.Fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operand");
+        ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Arithmetic operator applied to non-numeric operand");
       }
 
       return null;
@@ -939,23 +939,19 @@ class ReadStmtNode extends StmtNode {
         return new ErrorType();
       }
       if(expType.isFnType()){
-        //TODO: Attempt to read a function, check this
-        //is it a function call expression or is it a function symbol?
-        if(exp instanceof CallExpNode){
-          if(myExp.sym().getReturnType().isVoidType()){
-            ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read void");
-          }
-        } else {
           ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a function");
-        }
-      } else if (expType.isStructDefType()){
-        ErrMsg.fatal(myExp.lineNume(), myExp.charNum(), "Attempt to write a struct name");
-        return new ErrorType();
-      } else if (expType.isStructType()){
-        ErrMsg.fatal(myExp.lineNume(), myExp.charNum(), "Attempt to write a struct variable");
-        return new ErrorType();
-      } else {
-        return new ErrorType();
+	  return new ErrorType();
+      } 
+      else if (expType.isStructDefType()){
+          ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a struct name");
+          return new ErrorType();
+      } 
+      else if (expType.isStructType()){
+          ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to read a struct variable");
+          return new ErrorType();
+      } 
+      else {
+	  return new ErrorType();
       }
 
     }
@@ -997,7 +993,7 @@ class WriteStmtNode extends StmtNode {
         if(expType.isFnType()){
           //TODO: Attempt to write a function, check this
           //is it a function call expression or is it a function symbol?
-          if(!(exp instanceof CallExpNode)){
+          if(!(myExp instanceof CallExpNode) && !myExp.typeCheck().isVoidType()){
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a function");
           }
         }
@@ -1660,7 +1656,9 @@ class AssignNode extends ExpNode {
 	}
        
       }
-
+      else{
+	return rhsType;
+	}
 
 
     }
