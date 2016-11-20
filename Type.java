@@ -228,7 +228,7 @@ class BinaryExpressionType extends Type{
     return t.isBinaryExpressionType();
   }
 
-  public string toString() {
+  public String toString() {
     return "BinaryExpression";
   }
 }

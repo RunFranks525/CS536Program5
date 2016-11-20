@@ -177,9 +177,7 @@ class DeclListNode extends ASTnode {
     }
 
     public void typeCheck(){
-      for(DeclNode node : myDecls) {
-        node.typeCheck();
-      }
+      
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1636,15 +1634,31 @@ class AssignNode extends ExpNode {
         myExp.nameAnalysis(symTab);
     }
 
-    public void typeCheck() {
+    public Type typeCheck() {
       Type lhsType = myLhs.sym().getType();
       Type rhsType = myExp.typeCheck();
 
       if(!rhsType.isErrorType()){
-        if(lhsType.isFnType()){
-          ErrMsg.fatal("Function assignment");
+        if(lhsType.isFnType() && rhsType.isFnType()){
+          ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Function assignment");
+	  return new ErrorType();
         }
-       // if(rhsType.isSt)
+	else if(lhsType.isStructDefType() && rhsType.isStructDefType()){
+	  ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Struct name assignment");
+	  return new ErrorType();
+	}
+	else if(lhsType.isStructType() && rhsType.isStructType()){
+	  ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Struct variable assignment");
+	  return new ErrorType();
+	}
+	else if(!lhsType.equals(rhsType)){
+	  ErrMsg.fatal(myLhs.lineNum(), myLhs.charNum(), "Type Mismatch");
+	  return new ErrorType();
+	}
+	else{
+	  return rhsType;
+	}
+       
       }
 
 
