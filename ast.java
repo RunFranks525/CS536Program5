@@ -270,14 +270,10 @@ class FnBodyNode extends ASTnode {
         ErrMsg.fatal("Missing return value", 0,0);
       } else if (returnStmtType != null && fnSym.getReturnType().isVoidType()){
         ErrMsg.fatal("Return with a value in a void function", returnStmt.lineNum(), returnStmt.charNum());
-<<<<<<< HEAD
-      }*/
-=======
-      }
+      }*/ /*
       if(!fnSym.getReturnType().equals(returnStmtType)){
         ErrMsg.fatal("Bad return value", returnStmt.lineNum(), returnStmt.charNum());
-      }
->>>>>>> merging stuff
+      }*/
     }
 
     public void unparse(PrintWriter p, int indent) {
