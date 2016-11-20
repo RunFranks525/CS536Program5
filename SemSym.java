@@ -18,6 +18,10 @@ public class SemSym {
     public String toString() {
         return type.toString();
     }
+
+    public Type getReturnType(){
+	return null;
+    }
 }
 
 /**
