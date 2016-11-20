@@ -312,7 +312,7 @@ class StmtListNode extends ASTnode {
 			ErrMsg.fatal("Bad Return Value",node.lineNum(),node.charNum());
 			return;
 		}
-		else if(rtnType == null && !fnSym.getType().isVoidType()){
+		else if(rtnType.isVoidType() && !fnSym.getType().isVoidType()){
 			ErrMsg.fatal("Missing return value", node.lineNum(), node.charNum());
 			return;
 		}
@@ -1260,7 +1260,10 @@ class ReturnStmtNode extends StmtNode {
     }
 
     public Type typeCheck() {
-     return myExp.typeCheck();
+     if(myExp != null)
+	return myExp.typeCheck();
+     else
+	return new VoidType();
     }
 
     public int lineNum() {
@@ -1295,7 +1298,9 @@ abstract class ExpNode extends ASTnode {
      */
     public void nameAnalysis(SymTable symTab) { }
 
-    public Type typeCheck() { }
+    public Type typeCheck() { 
+	return new VoidType();	
+    }
 
     public int lineNum() {
 	    return 0;
