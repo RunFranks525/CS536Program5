@@ -2131,7 +2131,6 @@ class NotEqualsNode extends BinaryExpNode {
         return new ErrorType();
       } else {
         ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Type mismatch");
-        return new ErrorType();
       }
 
       if(lhsType.isStructType() && rhsType.isStructType()){
@@ -2142,7 +2141,6 @@ class NotEqualsNode extends BinaryExpNode {
 	       return new ErrorType();
       } else {
         ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Type mismatch");
-	      return new ErrorType();
       }
 
       if(lhsType.isStructDefType() && rhsType.isStructDefType()){
@@ -2153,7 +2151,6 @@ class NotEqualsNode extends BinaryExpNode {
 	       return new ErrorType();
       } else {
         ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Type mismatch");
-	      return new ErrorType();
       }
 
       if(lhsType.isBoolType() && rhsType.isBoolType()){
@@ -2165,8 +2162,8 @@ class NotEqualsNode extends BinaryExpNode {
 	       return new ErrorType();
       } else {
         ErrMsg.fatal(myExp2.lineNum(), myExp2.charNum(), "Type mismatch");
-	      return new ErrorType();
       }
+      return new ErrorType();
     }
 
     public void unparse(PrintWriter p, int indent) {
