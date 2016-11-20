@@ -1036,7 +1036,7 @@ class IfStmtNode extends StmtNode {
      * - exit the scope
      */
     public void nameAnalysis(SymTable symTab) {
-      Exp.nameAnalysis(symTab);
+      myExp.nameAnalysis(symTab);
       symTab.addScope();
       myDeclList.nameAnalysis(symTab);
       myStmtList.nameAnalysis(symTab);
@@ -1714,6 +1714,7 @@ class CallExpNode extends ExpNode {
              Type currentCallActualType = myExpList.getExpAtIndex(i).typeCheck();
              if(!currentFnFormalType.equals(currentCallActualType)){
                ErrMsg.fatal(currExp.lineNum(), currExp.charNum(), "Type of actual does not match type of formal");
+	     }
           }
         }
       }
