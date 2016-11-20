@@ -1697,25 +1697,28 @@ class CallExpNode extends ExpNode {
         myExpList.nameAnalysis(symTab);
     }
 
-    public void typeCheck() {
+    public Type typeCheck() {
       Type idType = myId.typeCheck();
       SemSym idSym = myId.sym();
       if(!idType.isFnType()) {
         ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Attempt to call a non-function");
+        return new ErrorType();
       } else {
         FnSym fnIdSym = (FnSym) idSym;
         if (fnIdSym.getNumParams() != myExpList.getNumExps()){
           ErrMsg.fatal(myId.lineNum(), myId.charNum(), "Function call with wrong number of args");
+          return new ErrorType();
         } else {
           List<Type> fnParams = fnIdSym.getParamTypes();
           for(int i = 0; i < fnIdSym.getNumParams(); i++){
 	           ExpNode currExp = myExpList.getExpAtIndex(i);
              Type currentFnFormalType = fnParams.get(i);
              Type currentCallActualType = myExpList.getExpAtIndex(i).typeCheck();
-             if(!currentFnFormalType.equals(currentCallActualType)){
+             if (!currentFnFormalType.equals(currentCallActualType)) {
                ErrMsg.fatal(currExp.lineNum(), currExp.charNum(), "Type of actual does not match type of formal");
 	           }
           }
+          return idType();
         }
       }
     }
