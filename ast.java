@@ -997,12 +997,12 @@ class WriteStmtNode extends StmtNode {
             ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a function");
           }
         }
-
+	return expType; 
       } else if (expType.isStructDefType()){
-        ErrMsg.fatal(myExp.lineNume(), myExp.charNum(), "Attempt to write a struct name");
+        ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct name");
         return new ErrorType();
       } else if (expType.isStructType()){
-        ErrMsg.fatal(myExp.lineNume(), myExp.charNum(), "Attempt to write a struct variable");
+        ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Attempt to write a struct variable");
         return new ErrorType();
       } else {
         return new ErrorType();
