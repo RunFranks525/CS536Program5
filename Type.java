@@ -50,10 +50,6 @@ abstract public class Type {
     public boolean isStructDefType() {
         return false;
     }
-
-    public boolean isBinaryExpressionType(){
-      return false;
-    }
 }
 
 // **********************************************************************
@@ -203,32 +199,4 @@ class StructDefType extends Type {
     public String toString() {
         return "struct";
     }
-}
-
-// **********************************************************************
-// ExpressionType
-// **********************************************************************
-class BinaryExpressionType extends Type{
-
-  private Type expressionType;
-
-  public boolean isBinaryExpressionType() {
-    return true;
-  }
-
-  public Type setExpressionType(Type expressionType){
-    this.expressionType = expressionType;
-  }
-
-  public Type getExpressionType(){
-    return this.expressionType;
-  }
-
-  public boolean equals(Type t) {
-    return t.isBinaryExpressionType();
-  }
-
-  public String toString() {
-    return "BinaryExpression";
-  }
 }
