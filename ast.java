@@ -1313,7 +1313,11 @@ abstract class ExpNode extends ASTnode {
     public void nameAnalysis(SymTable symTab) { }
 
     public Type typeCheck() {
-	return new VoidType();
+	    return new VoidType();
+    }
+
+    public SemSym sym() {
+      return null;
     }
 
     public int lineNum() {
