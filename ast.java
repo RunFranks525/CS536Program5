@@ -359,7 +359,7 @@ class ExpListNode extends ASTnode {
 	    return myExps;
     }
 
-    public Type getExpAtIndex(int i) {
+    public ExpNode getExpAtIndex(int i) {
       return myExps.get(i);
     }
 
@@ -1691,8 +1691,9 @@ class CallExpNode extends ExpNode {
       } else {
         List<Type> fnParams = idSym.getParamTypes();
         for(int i = 0; i < idSym.getNumParams(); i++){
+	  ExpNode currExp = myExpList.getExpAtIndex(i);
           Type currentFnFormalType = fnParams.get(i);
-          Type currentCallActualType = myExpList.getExpAtIndex(i);
+          Type currentCallActualType = myExpList.getExpAtIndex(i).typeCheck();
           if(!currentFnFormalType.equals(currentCallActualType)){
             ErrMsg.fatal(currExp.lineNum(), currExp.charNum(), "Type of actual does not match type of formal");
           }
@@ -2035,7 +2036,7 @@ class EqualsNode extends BinaryExpNode {
       if(lhsType.isErrorType() || rhsType.isErrorType()) return new ErrorType();
 
       if(lhsType.isFnType() && rhsType.isFnType()){
-        if(lhsType instanceof CallExpNode && rhsType instanceof CallExpNode){
+        if(myExp1 instanceof CallExpNode && myExp2 instanceof CallExpNode){
           SemSym exp1Sym = myExp1.sym();
           SemSym exp2Sym = myExp2.sym();
           if(exp1Sym.getReturnType().isVoidType() || exp2Sym.getReturnType().isVoidType()){
@@ -2053,7 +2054,7 @@ class EqualsNode extends BinaryExpNode {
       }
 
       if(lhsType.isStructType() && rhsType.isStructType()){
-        ErrMsg.fatal(myExp1.lineNum(), myExp2.charNum(), "Equality operator applied to struct variables",);
+        ErrMsg.fatal(myExp1.lineNum(), myExp2.charNum(), "Equality operator applied to struct variables");
 	      return new ErrorType();
       }  else if (!lhsType.isStructType()) {
         ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
@@ -2120,7 +2121,7 @@ class NotEqualsNode extends BinaryExpNode {
             ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to void functions");
           }
         } else {
-          ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions", );
+          ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Equality operator applied to functions");
         }
       } else if (!(lhsType.isFnType())) {
         ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
