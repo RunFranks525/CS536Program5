@@ -1707,9 +1707,10 @@ class CallExpNode extends ExpNode {
       } else if (idSym.getNumParams() != myExpList.getNumParams()){
         ErrMsg.fatal(functionSymbol.lineNum(), functionSymbol.charNum(), "Function call with wrong number of args");
       } else {
+        isSym = (FnSym) idSym;
         List<Type> fnParams = idSym.getParamTypes();
         for(int i = 0; i < idSym.getNumParams(); i++){
-	  ExpNode currExp = myExpList.getExpAtIndex(i);
+	        ExpNode currExp = myExpList.getExpAtIndex(i);
           Type currentFnFormalType = fnParams.get(i);
           Type currentCallActualType = myExpList.getExpAtIndex(i).typeCheck();
           if(!currentFnFormalType.equals(currentCallActualType)){
@@ -1790,7 +1791,7 @@ class UnaryMinusNode extends UnaryExpNode {
     }
 
     public Type typeCheck(){
-      Type expType = exp.typeCheck();
+      Type expType = myExp.typeCheck();
       if(expType.isErrorType()) return new ErrorType();
 
       if(expType.isIntType()){
@@ -1814,7 +1815,7 @@ class NotNode extends UnaryExpNode {
     }
 
     public Type typeCheck() {
-      Type expType = exp.typeCheck();
+      Type expType = myExp.typeCheck();
       if(expType.isErrorType()) return new ErrorType();
 
       if(expType.isBoolType()){
