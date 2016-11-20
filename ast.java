@@ -261,16 +261,16 @@ class FnBodyNode extends ASTnode {
     }
 
     public void typeCheck(SemSym fnSym){
-      StmtNode returnStmt = myStmtList.typeCheck();
+	//TODO: figure out the ReturnStmt thing with no return stmt and a stmt list
+
+	myStmtList.typeCheck(fnSym);
+      /*StmtNode returnStmt = myStmtList.typeCheck();
       Type returnStmtType = returnStmt.typeCheck();
       if(returnStmtType == null && !fnSym.getReturnType().isVoidType()) {
         ErrMsg.fatal("Missing return value", 0,0);
       } else if (returnStmtType != null && fnSym.getReturnType().isVoidType()){
         ErrMsg.fatal("Return with a value in a void function", returnStmt.lineNum(), returnStmt.charNum());
-      }
-      if(!fnSym.getReturnType().equals(returnStmtType){
-        ErrMsg.fatal("Bad return value", returnStmt.lineNum(), returnStmt.charNum());
-      }
+      }*/
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -298,12 +298,31 @@ class StmtListNode extends ASTnode {
         }
     }
 
-    public StmtNode typeCheck() {
-      StmtNode returnStmt = null;
+    public void typeCheck(SemSym fnSym) {
+	//TODO:figure out the error checking for return stmt shiz
+
       for (StmtNode node: myStmts){
-        node.typeCheck();
+        if(node instanceof ReturnStmtNode){
+		Type rtnType = node.typeCheck();
+		if(fnSym.getType().isVoidType() && !rtnType.isVoidType()){
+			ErrMsg.fatal("Return with a value in a void function", node.lineNum(), node.charNum());
+			return;
+		}
+		else if(!rtnType.equals(fnSym.getType())){
+			ErrMsg.fatal("Bad Return Value",node.lineNum(),node.charNum());
+			return;
+		}
+		else if(rtnType == null && !fnSym.getType().isVoidType()){
+			ErrMsg.fatal("Missing return value", node.lineNum(), node.charNum());
+			return;
+		}
+		else{}
+	}
+	else{
+		node.typeCheck();
+	}
       }
-      returnStmt = myStmts.getLast();
+      
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -405,8 +424,7 @@ class VarDeclNode extends DeclNode {
         IdNode structId = null;
 
         if (myType instanceof VoidNode) {  // check for void type
-            ErrMsg.fatal(myId.lineNum(), myId.charNum(),
-                         "Non-function declared void");
+            ErrMsg.fatal("Non-function declared void", myId.lineNum(), myId.charNum());
             badDecl = true;
         }
 
@@ -781,7 +799,9 @@ class StructNode extends TypeNode {
 
 abstract class StmtNode extends ASTnode {
     abstract public void nameAnalysis(SymTable symTab);
-    abstract public void typeCheck();
+    public Type typeCheck() {
+	return null;	
+    };
     public int lineNum(){ return 0; }
     public int charNum(){ return 0; }
 }
@@ -799,8 +819,9 @@ class AssignStmtNode extends StmtNode {
         myAssign.nameAnalysis(symTab);
     }
 
-    public void typeCheck() {
+    public Type typeCheck() {
       myAssign.typeCheck();
+      return null;
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -826,7 +847,7 @@ class PostIncStmtNode extends StmtNode {
         myExp.nameAnalysis(symTab);
     }
 
-    public void typeCheck(){
+    public Type typeCheck(){
       Type expType = myExp.typeCheck();
       if(expType.isErrorType()){
         return new ErrorType();
@@ -834,6 +855,8 @@ class PostIncStmtNode extends StmtNode {
       if(!expType.isIntType()){
         ErrMsg.Fatal("Arithmetic operator applied to non-numeric operand", myExp.lineNum(), myExp.charNum());
       }
+
+      return null;
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -859,7 +882,7 @@ class PostDecStmtNode extends StmtNode {
         myExp.nameAnalysis(symTab);
     }
 
-    public void typeCheck(){
+    public Type typeCheck(){
       Type expType = myExp.typeCheck();
       if(expType.isErrorType()){
         return new ErrorType();
@@ -867,6 +890,8 @@ class PostDecStmtNode extends StmtNode {
       if(!expType.isIntType()){
         ErrMsg.Fatal("Arithmetic operator applied to non-numeric operand", myExp.lineNum(), myExp.charNum());
       }
+
+      return null;
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -892,7 +917,10 @@ class ReadStmtNode extends StmtNode {
         myExp.nameAnalysis(symTab);
     }
 
-    public void typeCheck() {
+    public Type typeCheck() {
+
+	//TODO: check out the return things here
+
       //Read Stmts can only be int or bool expressions or String literals
       Type expType = myExp.typeCheck();
       if(expType.isErrorType()){
@@ -944,7 +972,10 @@ class WriteStmtNode extends StmtNode {
         myExp.nameAnalysis(symTab);
     }
 
-    public void typeCheck() {
+    public Type typeCheck() {
+
+	//TODO: check on the return thangs
+
       //Write Stmts can only be int or bool expressions or String literals
       Type expType = myExp.typeCheck();
       if(expType.isErrorType()){
@@ -1010,7 +1041,7 @@ class IfStmtNode extends StmtNode {
       }
     }
 
-    public void typeCheck() {
+    public Type typeCheck() {
       Type ifExpType = myExp.typeCheck();
       if(ifExpType.isErrorType()){
         return new ErrorType();
@@ -1020,6 +1051,7 @@ class IfStmtNode extends StmtNode {
         ErrMsg.fatal("Non-bool expression used as an if condition", myExp.lineNum(), myExp.charNum());
         return new ErrorType();
       }
+      return null;
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1085,7 +1117,7 @@ class IfElseStmtNode extends StmtNode {
         }
     }
 
-    public void typeCheck() {
+    public Type typeCheck() {
       Type ifElseExpType = myExp.typeCheck();
       if(ifElseExpType.isErrorType()){
         return new ErrorType();
@@ -1095,6 +1127,7 @@ class IfElseStmtNode extends StmtNode {
         ErrMsg.fatal("Non-bool expression used as an if condition", myExp.lineNum(), myExp.charNum());
         return new ErrorType();
       }
+      return null;
     }
 
 
@@ -1130,7 +1163,7 @@ class WhileStmtNode extends StmtNode {
         myStmtList = slist;
     }
 
-    public void typeCheck() {
+    public Type typeCheck() {
       Type whileExpType = myExp.typeCheck();
       if(whileExpType.isErrorType()){
         return new ErrorType();
@@ -1140,6 +1173,7 @@ class WhileStmtNode extends StmtNode {
         ErrMsg.fatal("Non-bool expression used as a while condition", myExp.lineNum(), myExp.charNum());
         return new ErrorType();
       }
+      return null;
     }
 
     /**
@@ -1194,8 +1228,9 @@ class CallStmtNode extends StmtNode {
         myCall.nameAnalysis(symTab);
     }
 
-    public void typeCheck(){
+    public Type typeCheck(){
       myCall.typeCheck();
+      return null;
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -1225,7 +1260,7 @@ class ReturnStmtNode extends StmtNode {
     }
 
     public Type typeCheck() {
-      return myExp.typeCheck();
+     return myExp.typeCheck();
     }
 
     public int lineNum() {
