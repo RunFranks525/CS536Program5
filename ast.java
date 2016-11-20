@@ -1718,7 +1718,7 @@ class CallExpNode extends ExpNode {
                ErrMsg.fatal(currExp.lineNum(), currExp.charNum(), "Type of actual does not match type of formal");
 	           }
           }
-          return idType();
+          return idType;
         }
       }
     }
