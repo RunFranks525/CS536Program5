@@ -12,11 +12,19 @@ int f(int a, int b) {
 			sum = 1;	
 		}
 	}
-	if(sum == 100) {
-		return sum;
-	} else {
+	return sum;
+}
 
-	}
+int returnIntFunc(int a) {
+	return a;
+}
+
+bool returnBoolFunc(bool a) {
+	return a;
+}
+
+void returnNothing(){
+
 }
 
 struct myStruct{
@@ -39,7 +47,79 @@ void coutFn(int a, bool b){
 	cout << a;
 	cout << b;
 	cout << "coconuts";
+}
 
+int binaryNumericExpressions(int term1, int term2) {
+	int product;
+	int quotient;
+	int sum;
+	int minus;
+	product = term1 * term2;
+	quotient = term1 / term2;
+	sum = term1 + term2;
+	minus = term1 - term2;
+	return sum;
+}
+
+bool binaryLogicalExpressions(bool term1, bool term2) {
+	bool and;
+	bool or;
+	and = term1 && term2;
+	or = term1 || term2;
+	return and;
+}
+
+int binaryRelationalExpressions(int term1, int term2) {
+	return 0;
+}
+
+int unaryNumericExpression(int term1) {
+	//-, ++, --
+	int negate;
+	int a;
+	a = 5;
+	negate = -a;
+        a++;
+	a--;
+	return a;
+}
+
+bool unaryLogicalExpression(bool term1) {
+	//!
+	return !term1;
+}
+
+bool binaryEqualityNumericExpressions(int term1, int term2) {
+	if(term1 == term2) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool binaryEqualityLogicalExpressions(bool term1, bool term2) {
+	if(term1 == term2) {
+		return true;
+	} else {
+		return false;
+	}
+}
+>>>>>>> --ammend
+
+bool binaryNonEqualityNumericExpressions(int term1, int term2) {
+	if(term1 != term2) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+bool binaryNonEqualityLogicalExpressions(bool term1, bool term2) {
+	if(term1 != term2) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 int main(){

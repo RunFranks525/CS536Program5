@@ -136,6 +136,10 @@ class ProgramNode extends ASTnode {
     }
 
     public void typeCheck(){
+<<<<<<< HEAD
+=======
+	System.out.println("Starting type checking");
+>>>>>>> --ammend
     	myDeclList.typeCheck();
     }
 
@@ -177,7 +181,13 @@ class DeclListNode extends ASTnode {
     }
 
     public void typeCheck(){
+<<<<<<< HEAD
 
+=======
+	for(DeclNode node : myDecls){
+		node.typeCheck();
+	}
+>>>>>>> --ammend
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -259,6 +269,7 @@ class FnBodyNode extends ASTnode {
     }
 
     public void typeCheck(Type fnType){
+<<<<<<< HEAD
 	//TODO: figure out the ReturnStmt thing with no return stmt and a stmt list
 
 	myStmtList.typeCheck(fnType);
@@ -279,6 +290,9 @@ class FnBodyNode extends ASTnode {
         ErrMsg.fatal("Bad return value", returnStmt.lineNum(), returnStmt.charNum());
       }
       */
+=======
+	myStmtList.typeCheck(fnType);
+>>>>>>> --ammend
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -307,11 +321,27 @@ class StmtListNode extends ASTnode {
     }
 
     public void typeCheck(Type fnType) {
+<<<<<<< HEAD
 	//TODO:figure out the error checking for return stmt shiz
 	Boolean  returnFound = false;
       for (StmtNode node: myStmts){
         if(node instanceof ReturnStmtNode){
 		returnFound = true;
+=======
+<<<<<<< HEAD
+	//TODO:figure out the error checking for return stmt shiz
+	Boolean  returnFound = false;
+=======
+>>>>>>> --ammend
+      for (StmtNode node: myStmts){
+	System.out.println(node.toString());
+        if(node instanceof ReturnStmtNode){
+<<<<<<< HEAD
+		returnFound = true;
+=======
+		System.out.print("found returnStatementNode");
+>>>>>>> --ammend
+>>>>>>> --ammend
 		Type rtnType = node.typeCheck();
 		if(fnType.isVoidType() && !rtnType.isVoidType()){
 			ErrMsg.fatal(node.lineNum(), node.charNum(), "Return with a value in a void function");
@@ -405,6 +435,10 @@ abstract class DeclNode extends ASTnode {
      * Note: a formal decl needs to return a sym
      */
     abstract public SemSym nameAnalysis(SymTable symTab);
+<<<<<<< HEAD
+=======
+    public void typeCheck() { }
+>>>>>>> --ammend
 }
 
 class VarDeclNode extends DeclNode {
