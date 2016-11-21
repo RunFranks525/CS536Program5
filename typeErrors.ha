@@ -83,7 +83,7 @@ void relationalOperationsWithNonNumericTypes(bool term1, bool term2){
 
 void coutErrors(){
 	struct myStruct mS;
-	//cout << intFunc; 	//this should throw an error "Attempt to write a function"
+	cout << intFunc; 	//this should throw an error "Attempt to write a function"
 	cout << voidFunc(); 	//Not throwing error about returning a void value
 	cout << myStruct; 	//this should throw an error "Attempt to write a struct name"
 	cout << mS;		//this should throw an error "Attempt to write a struct variable"
@@ -101,23 +101,31 @@ void callFunctionErrors(){
 
 }
 
-void testCondiditionals() {
+void unaryOpsOnBadTypes(int a, bool b) {
+	a = !a; //Should throw an error "Logical operator applied to non-bool operand"
+	b = -b; //Should throw an error "Arithmetic operator applied to non-numeric operand"
+}
+
+void testConditionals() {
 	int a;
 	int b;
 	a = 5;
 	b = 6;
-	if(5 * 6) { //Not Reporting line and char num
+	if(5 * 6) { //should throw an error "Non-bool expression used as an if condition"
 		a--;
 	}
 
-	if(5 * 6) { //Not Reporting line and char num
+	if(5 * 6) { //should throw an error "Non-bool expression used as an if condition"
 		a = b;
 	} else { 
 		b = a;
 	}
 
-	while(a * 5) { //Not Reporting line and char num
+	while(a * 5) { //should throw an error "Non-bool expression used as a while condition"
 		a++;
+	}
+	if(-a) {
+
 	}
 }
 
@@ -131,15 +139,14 @@ void assignWrongType(int a, bool b) {
 }
 
 void assignFunctionType() {
-
+	int c;
+	returnBoolFromIntFunction = intFunc; //Should throw an error "Function Assignment"
+	c = intFunc; //Should throw an error "type mismatch"
 }
 
 void assignStructTypes() {
 
 }
-
-
-
 
 int main(){
 	int a;

@@ -59,7 +59,7 @@ test:
 
 ###
 # test for bad input
-#
+###
 bad:
 	java P5 typeErrors.ha typeErrors.out
 

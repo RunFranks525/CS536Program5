@@ -1036,7 +1036,6 @@ class IfStmtNode extends StmtNode {
       if (ifExpType.isErrorType()) {
         return new ErrorType();
       }
-
       if (!ifExpType.isBoolType()) {
         ErrMsg.fatal(myExp.lineNum(), myExp.charNum(), "Non-bool expression used as an if condition");
         return new ErrorType();
@@ -1768,6 +1767,14 @@ abstract class UnaryExpNode extends ExpNode {
       return null;
     }
 
+    public int lineNum() {
+	return myExp.lineNum();
+    }
+
+    public int charNum() {
+	return myExp.charNum();
+    }
+
     /**
      * nameAnalysis
      * Given a symbol table symTab, perform name analysis on this node's child
@@ -1788,6 +1795,14 @@ abstract class BinaryExpNode extends ExpNode {
 
     public Type typeCheck(){
       return null;
+    }
+
+    public int lineNum() {
+	return myExp1.lineNum();
+    }
+
+    public int charNum() {
+	return myExp1.charNum();
     }
 
     /**
