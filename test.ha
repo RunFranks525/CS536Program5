@@ -1,3 +1,11 @@
+int returnIntFunc(int a) {
+	return a;
+}
+
+bool returnBoolFunc(bool a) {
+	return a;
+}
+
 int f(int a, int b) {
 	int c;
 	bool quit;
@@ -12,15 +20,73 @@ int f(int a, int b) {
 			sum = 1;	
 		}
 	}
+
+	
 	return sum;
 }
 
-int returnIntFunc(int a) {
-	return a;
+int testNumCallExpressionEqualityOps() {
+	int sum;
+	if(returnIntFunc(5) == returnIntFunc(6)){
+		sum = sum + 10;
+	}
+	if(returnIntFunc(5) == 5) {
+		sum = 5;
+	}
+	return sum;
+	
 }
 
-bool returnBoolFunc(bool a) {
+int testNumCallExpressionRelationalOps() {
+	int sum;
+	if(returnIntFunc(5) > 5) {
+		sum = 5;
+	}
+	if(returnIntFunc(5) < 5) {
+		sum = 5;
+	}
+	if(returnIntFunc(5) >= 5) {
+		sum = 5;
+	}
+	if(returnIntFunc(5) <= 5) {
+		sum = 5;
+	}
+	return sum;
+}
+
+int testNumCallExpressionInEqualityOps() {
+	int sum;
+	if(returnIntFunc(5) != returnIntFunc(6)){
+		sum = sum + 10;
+	}
+	if(returnIntFunc(5) != 5) {
+		sum = 5;
+	}	
+	return sum;
+}
+
+bool testBoolCallExpressionEqualityOps() {
+	bool a;
+	if(returnBoolFunc(true) == returnBoolFunc(true)){
+		a = true;
+	}
+	if(returnBoolFunc(false) == true) {
+		a = false;
+	}
 	return a;
+	
+}
+
+bool testBoolCallExpressionInEqualityOps() {
+	bool a;
+	if(returnBoolFunc(true) != returnBoolFunc(true)){
+		a = true;
+	}
+	if(returnBoolFunc(false) != true) {
+		a = false;
+	}
+	return a;
+	
 }
 
 void returnNothing(){
