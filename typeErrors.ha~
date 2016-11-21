@@ -83,7 +83,7 @@ void relationalOperationsWithNonNumericTypes(bool term1, bool term2){
 
 void coutErrors(){
 	struct myStruct mS;
-	//cout << intFunc; 	//this should throw an error "Attempt to write a function"
+	//cout << intFunc; 	//nullPointer
 	cout << voidFunc(); 	//Not throwing error about returning a void value
 	cout << myStruct; 	//this should throw an error "Attempt to write a struct name"
 	cout << mS;		//this should throw an error "Attempt to write a struct variable"
@@ -92,7 +92,7 @@ void coutErrors(){
 void cinErrors(){
 	struct myStruct mS;
 
-	cin >> boolFunc;	//this should throw an error "Attempt to read a function"
+	cin >> boolFunc;
 	cin >> myStruct; 	//this should throw an error "Attempt to read a struct name"
 	cin >> mS;		//this should throw an error "Attempt to read a struct variable"
 }
