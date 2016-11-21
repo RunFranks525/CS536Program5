@@ -111,6 +111,7 @@ void cinFn(int a, bool b){
 void coutFn(int a, bool b){	
 	cout << a;
 	cout << b;
+	cout << returnIntFunc(5);
 	cout << "coconuts";
 }
 
