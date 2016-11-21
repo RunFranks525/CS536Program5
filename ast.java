@@ -308,11 +308,12 @@ class StmtListNode extends ASTnode {
 
     public void typeCheck(Type fnType) {
 	//TODO:figure out the error checking for return stmt shiz
-
+	Boolean  returnFound = false;
       for (StmtNode node: myStmts){
         if(node instanceof ReturnStmtNode){
+		returnFound = true;
 		Type rtnType = node.typeCheck();
-		if(fnSym.getType().isVoidType() && !rtnType.isVoidType()){
+		if(fnType.isVoidType() && !rtnType.isVoidType()){
 			ErrMsg.fatal(node.lineNum(), node.charNum(), "Return with a value in a void function");
 			return;
 		}
@@ -321,7 +322,7 @@ class StmtListNode extends ASTnode {
 			return;
 		}
 		else if(rtnType.isVoidType() && !fnType.isVoidType()){
-			ErrMsg.fatal(node.lineNum(), node.charNum(), "Missing return value");
+			ErrMsg.fatal(0, 0, "Missing return value");
 			return;
 		}
 		else{}
@@ -330,6 +331,9 @@ class StmtListNode extends ASTnode {
 		node.typeCheck();
 	}
       }
+	if(!returnFound && !fnType.isVoidType()){
+		ErrMsg.fatal(0, 0, "Missing return value");
+	}
 
     }
 

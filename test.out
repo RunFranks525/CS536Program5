@@ -1,8 +1,32 @@
+int f(int a, int b) {
+    int c;
+    bool quit;
+    int sum;
+    c(int) = (a(int) + b(int));
+    quit(bool) = false;
+    while ((!quit(bool))) {
+        sum(int) = (sum(int) + c(int));
+        if ((sum(int) > 10)) {
+            quit(bool) = true;
+        }
+        else {
+            sum(int) = 1;
+        }
+    }
+    if ((sum(int) == 100)) {
+        return sum(int);
+    }
+    else {
+    }
+}
+
 int main() {
     int a;
     bool b;
     a(int) = 1;
     b(bool) = true;
+    a(int) = (1 + 5);
+    f(int,int->int)(a(int), 5);
     return a(int);
 }
 
