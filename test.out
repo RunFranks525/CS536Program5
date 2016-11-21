@@ -1,3 +1,9 @@
+struct myStruct{
+    int x;
+    int y;
+    bool z;
+};
+
 int returnIntFunc(int a) {
     return a(int);
 }
@@ -88,21 +94,57 @@ bool testBoolCallExpressionInEqualityOps() {
 void returnNothing() {
 }
 
-struct myStruct{
-    int x;
-    int y;
-};
+bool testStructVarsOps() {
+    struct myStruct mS;
+    mS(myStruct).x(int) = 5;
+    mS(myStruct).y(int) = 4;
+    mS(myStruct).z(bool) = false;
+    if (mS(myStruct).z(bool)) {
+        return false;
+    }
+    if ((mS(myStruct).z(bool) == false)) {
+        return true;
+    }
+    if ((mS(myStruct).x(int) == mS(myStruct).y(int))) {
+        return mS(myStruct).z(bool);
+    }
+    if ((mS(myStruct).x(int) != mS(myStruct).y(int))) {
+        return true;
+    }
+    if ((mS(myStruct).x(int) < mS(myStruct).y(int))) {
+        return mS(myStruct).z(bool);
+    }
+    if ((8 <= mS(myStruct).y(int))) {
+        return false;
+    }
+    if ((mS(myStruct).y(int) > mS(myStruct).x(int))) {
+        return mS(myStruct).z(bool);
+    }
+    if ((mS(myStruct).x(int) >= 6)) {
+        return false;
+    }
+}
 
 void cinFn(int a, bool b) {
+    struct myStruct mS;
+    cin >> mS(myStruct).x(int);
+    cin >> mS(myStruct).z(bool);
     cin >> a(int);
     cin >> b(bool);
     return;
 }
 
 void coutFn(int a, bool b) {
+    struct myStruct mStruct;
+    cout << mStruct(myStruct).y(int);
+    cout << mStruct(myStruct).z(bool);
     cout << a(int);
     cout << b(bool);
+    cout << returnIntFunc(int->int)(5);
+    cout << returnBoolFunc(bool->bool)(true);
     cout << "coconuts";
+    cout << false;
+    cout << 33;
 }
 
 int binaryNumericExpressions(int term1, int term2) {
@@ -117,11 +159,38 @@ int binaryNumericExpressions(int term1, int term2) {
     return sum(int);
 }
 
+int structNumericExpressions(int term1, int term2) {
+    int product;
+    int quotient;
+    int sum;
+    int minus;
+    struct myStruct mS;
+    mS(myStruct).x(int) = term1(int);
+    mS(myStruct).y(int) = term2(int);
+    product(int) = (mS(myStruct).x(int) * mS(myStruct).y(int));
+    quotient(int) = (mS(myStruct).x(int) / mS(myStruct).y(int));
+    sum(int) = (mS(myStruct).x(int) + mS(myStruct).y(int));
+    minus(int) = (mS(myStruct).x(int) - mS(myStruct).y(int));
+    return sum(int);
+}
+
 bool binaryLogicalExpressions(bool term1, bool term2) {
     bool and;
     bool or;
     and(bool) = (term1(bool) && term2(bool));
     or(bool) = (term1(bool) || term2(bool));
+    return and(bool);
+}
+
+bool structLogicalExpressions(bool term1, bool term2) {
+    struct myStruct mS1;
+    struct myStruct mS2;
+    bool and;
+    bool or;
+    mS1(myStruct).z(bool) = term1(bool);
+    mS2(myStruct).z(bool) = term2(bool);
+    and(bool) = (mS1(myStruct).z(bool) && mS2(myStruct).z(bool));
+    or(bool) = (mS1(myStruct).z(bool) || mS2(myStruct).z(bool));
     return and(bool);
 }
 

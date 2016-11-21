@@ -1498,7 +1498,7 @@ class DotAccessExpNode extends ExpNode {
      * Return the symbol associated with this dot-access node.
      */
     public SemSym sym() {
-        return mySym;
+        return myId.sym();	//NOT SURE IF THIS WAS A HACK BUT I CHANGED IT TO myId's SYM!!
     }
 
     /**
@@ -1647,6 +1647,7 @@ class AssignNode extends ExpNode {
     }
 
     public Type typeCheck() {
+	
       Type lhsType = myLhs.sym().getType();
       Type rhsType = myExp.typeCheck();
 
