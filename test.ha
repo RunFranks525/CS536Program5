@@ -104,7 +104,8 @@ void cinFn(int a, bool b){
 	//cin >> mS.x;
 	cin >> a;
 	cin >> b;
-
+	cin >> "bananas";
+	cin >> 10;
 	return;
 }
 
