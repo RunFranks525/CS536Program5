@@ -1341,15 +1341,6 @@ class IntLitNode extends ExpNode {
     public Type typeCheck(){
 	    return new IntType();
     }
-
-    public int lineNum(){
-	return myLineNum;
-    }
-
-    public int charNum(){
-	return myCharNum;
-    }
-
     private int myLineNum;
     private int myCharNum;
     private int myIntVal;
@@ -1369,15 +1360,6 @@ class StringLitNode extends ExpNode {
     public Type typeCheck(){
 	    return new StringType();
     }
-
-    public int lineNum(){
-	return myLineNum;
-    }
-
-    public int charNum(){
-	return myCharNum;
-    }
-
     private int myLineNum;
     private int myCharNum;
     private String myStrVal;
@@ -1397,14 +1379,6 @@ class TrueNode extends ExpNode {
 	    return new BoolType();
     }
 
-    public int lineNum(){
-	return myLineNum;
-    }
-
-    public int charNum(){
-	return myCharNum;
-    }
-
     private int myLineNum;
     private int myCharNum;
 }
@@ -1421,14 +1395,6 @@ class FalseNode extends ExpNode {
 
     public Type typeCheck(){
 	    return new BoolType();
-    }
-
-    public int lineNum(){
-	return myLineNum;
-    }
-
-    public int charNum(){
-	return myCharNum;
     }
 
     private int myLineNum;
