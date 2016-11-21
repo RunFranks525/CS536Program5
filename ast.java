@@ -292,34 +292,27 @@ class StmtListNode extends ASTnode {
 
     public void typeCheck(Type fnType) {
 
-	//TODO:figure out the error checking for return stmt shiz
-	Boolean  returnFound = false;
 	for(StmtNode node : myStmts)  {
-        if(node instanceof ReturnStmtNode){
-		returnFound = true;
-		Type rtnType = node.typeCheck();
-		if(fnType.isVoidType() && !rtnType.isVoidType()){
-			ErrMsg.fatal(node.lineNum(), node.charNum(), "Return with a value in a void function");
-			return;
+        	if(node instanceof ReturnStmtNode){
+			Type rtnType = node.typeCheck();
+			if(fnType.isVoidType() && !rtnType.isVoidType()){
+				ErrMsg.fatal(node.lineNum(), node.charNum(), "Return with a value in a void function");
+				return;
+			}
+			else if(!rtnType.equals(fnType)){
+				ErrMsg.fatal(node.lineNum(),node.charNum(), "Bad Return Value");
+				return;
+			}
+			else if(rtnType.isVoidType() && !fnType.isVoidType()){
+				ErrMsg.fatal(0, 0, "Missing return value");
+				return;
+			}
+			else{}
 		}
-		else if(!rtnType.equals(fnType)){
-			ErrMsg.fatal(node.lineNum(),node.charNum(), "Bad Return Value");
-			return;
+		else{
+			node.typeCheck();
 		}
-		else if(rtnType.isVoidType() && !fnType.isVoidType()){
-			ErrMsg.fatal(0, 0, "Missing return value");
-			return;
-		}
-		else{}
-	}
-	else{
-		node.typeCheck();
-	}
-      }
-	if(!returnFound && !fnType.isVoidType()){
-		ErrMsg.fatal(0, 0, "Missing return value");
-	}
-
+      	}
     }
 
     public void unparse(PrintWriter p, int indent) {
@@ -2074,7 +2067,7 @@ class EqualsNode extends BinaryExpNode {
       if(lhsType.isBoolType() && rhsType.isBoolType()){
         return new BoolType();
       } else if (lhsType.isIntType() && rhsType.isIntType()){
-        return new IntType();
+        return new BoolType();
       } else if (!lhsType.isBoolType()) {
         ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
 	       return new ErrorType();
@@ -2108,7 +2101,7 @@ class NotEqualsNode extends BinaryExpNode {
       if(lhsType.isBoolType() && rhsType.isBoolType()){
         return new BoolType();
       } else if (lhsType.isIntType() && rhsType.isIntType()){
-        return new IntType();
+        return new BoolType();
       } else if (!lhsType.isBoolType()) {
         ErrMsg.fatal(myExp1.lineNum(), myExp1.charNum(), "Type mismatch");
 	       return new ErrorType();
@@ -2136,8 +2129,7 @@ class LessNode extends BinaryExpNode {
       //Do type checking here for ints
       Type lhsType = myExp1.typeCheck();
       Type rhsType = myExp2.typeCheck();
-      System.out.println("hello" + lhsType.toString());
-      System.out.println(rhsType.toString());
+
       if(lhsType.isErrorType() || rhsType.isErrorType()) return new ErrorType();
 
       if(lhsType.isIntType() && rhsType.isIntType()){
@@ -2169,8 +2161,6 @@ class GreaterNode extends BinaryExpNode {
       //Do type checking here for ints
       Type lhsType = myExp1.typeCheck();
       Type rhsType = myExp2.typeCheck();
-      System.out.println("hello" + lhsType.toString());
-      System.out.println(rhsType.toString());
       if(lhsType.isErrorType() || rhsType.isErrorType()) return new ErrorType();
 
       if(lhsType.isIntType() && rhsType.isIntType()){

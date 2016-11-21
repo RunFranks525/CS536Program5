@@ -33,17 +33,16 @@ struct myStruct{
 };
 
 void cinFn(int a, bool b){
-	myStruct mS;
+	//myStruct mS;
 	
-	cin >> mS.x;
+	//cin >> mS.x;
 	cin >> a;
 	cin >> b;
 
 	return;
 }
 
-void coutFn(int a, bool b){
-	
+void coutFn(int a, bool b){	
 	cout << a;
 	cout << b;
 	cout << "coconuts";
@@ -70,7 +69,19 @@ bool binaryLogicalExpressions(bool term1, bool term2) {
 }
 
 int binaryRelationalExpressions(int term1, int term2) {
-	return 0;
+	if(term1 > term2) {
+		return term1;
+	} 
+	if(term1 < term2) {
+		return term2;
+	}
+	if(term1 >= term2) {
+		return term1 + term2;
+	}
+	if(term1 >= term2) {
+		return term1 - term2;
+	}
+	return term1 * term2;
 }
 
 int unaryNumericExpression(int term1) {
@@ -104,7 +115,6 @@ bool binaryEqualityLogicalExpressions(bool term1, bool term2) {
 		return false;
 	}
 }
->>>>>>> --ammend
 
 bool binaryNonEqualityNumericExpressions(int term1, int term2) {
 	if(term1 != term2) {
