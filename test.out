@@ -1,0 +1,281 @@
+struct myStruct{
+    int x;
+    int y;
+    bool z;
+};
+
+int returnIntFunc(int a) {
+    return a(int);
+}
+
+bool returnBoolFunc(bool a) {
+    return a(bool);
+}
+
+int f(int a, int b) {
+    int c;
+    bool quit;
+    int sum;
+    c(int) = (a(int) + b(int));
+    quit(bool) = false;
+    while ((!quit(bool))) {
+        sum(int) = (sum(int) + c(int));
+        if ((sum(int) > 10)) {
+            quit(bool) = true;
+        }
+        else {
+            sum(int) = 1;
+        }
+    }
+    return sum(int);
+}
+
+int testNumCallExpressionEqualityOps() {
+    int sum;
+    if ((returnIntFunc(int->int)(5) == returnIntFunc(int->int)(6))) {
+        sum(int) = (sum(int) + 10);
+    }
+    if ((returnIntFunc(int->int)(5) == 5)) {
+        sum(int) = 5;
+    }
+    return sum(int);
+}
+
+int testNumCallExpressionRelationalOps() {
+    int sum;
+    if ((returnIntFunc(int->int)(5) > 5)) {
+        sum(int) = 5;
+    }
+    if ((returnIntFunc(int->int)(5) < 5)) {
+        sum(int) = 5;
+    }
+    if ((returnIntFunc(int->int)(5) >= 5)) {
+        sum(int) = 5;
+    }
+    if ((returnIntFunc(int->int)(5) <= 5)) {
+        sum(int) = 5;
+    }
+    return sum(int);
+}
+
+int testNumCallExpressionInEqualityOps() {
+    int sum;
+    if ((returnIntFunc(int->int)(5) != returnIntFunc(int->int)(6))) {
+        sum(int) = (sum(int) + 10);
+    }
+    if ((returnIntFunc(int->int)(5) != 5)) {
+        sum(int) = 5;
+    }
+    return sum(int);
+}
+
+bool testBoolCallExpressionEqualityOps() {
+    bool a;
+    if ((returnBoolFunc(bool->bool)(true) == returnBoolFunc(bool->bool)(true))) {
+        a(bool) = true;
+    }
+    if ((returnBoolFunc(bool->bool)(false) == true)) {
+        a(bool) = false;
+    }
+    return a(bool);
+}
+
+bool testBoolCallExpressionInEqualityOps() {
+    bool a;
+    if ((returnBoolFunc(bool->bool)(true) != returnBoolFunc(bool->bool)(true))) {
+        a(bool) = true;
+    }
+    if ((returnBoolFunc(bool->bool)(false) != true)) {
+        a(bool) = false;
+    }
+    return a(bool);
+}
+
+void returnNothing() {
+}
+
+bool testStructVarsOps() {
+    struct myStruct mS;
+    mS(myStruct).x(int) = 5;
+    mS(myStruct).y(int) = 4;
+    mS(myStruct).z(bool) = false;
+    if (mS(myStruct).z(bool)) {
+        return false;
+    }
+    if ((mS(myStruct).z(bool) == false)) {
+        return true;
+    }
+    if ((mS(myStruct).x(int) == mS(myStruct).y(int))) {
+        return mS(myStruct).z(bool);
+    }
+    if ((mS(myStruct).x(int) != mS(myStruct).y(int))) {
+        return true;
+    }
+    if ((mS(myStruct).x(int) < mS(myStruct).y(int))) {
+        return mS(myStruct).z(bool);
+    }
+    if ((8 <= mS(myStruct).y(int))) {
+        return false;
+    }
+    if ((mS(myStruct).y(int) > mS(myStruct).x(int))) {
+        return mS(myStruct).z(bool);
+    }
+    if ((mS(myStruct).x(int) >= 6)) {
+        return false;
+    }
+}
+
+void cinFn(int a, bool b) {
+    struct myStruct mS;
+    cin >> mS(myStruct).x(int);
+    cin >> mS(myStruct).z(bool);
+    cin >> a(int);
+    cin >> b(bool);
+}
+
+void coutFn(int a, bool b) {
+    struct myStruct mStruct;
+    cout << mStruct(myStruct).y(int);
+    cout << mStruct(myStruct).z(bool);
+    cout << a(int);
+    cout << b(bool);
+    cout << returnIntFunc(int->int)(5);
+    cout << returnBoolFunc(bool->bool)(true);
+    cout << "coconuts";
+    cout << false;
+    cout << 33;
+}
+
+int binaryNumericExpressions(int term1, int term2) {
+    int product;
+    int quotient;
+    int sum;
+    int minus;
+    product(int) = (term1(int) * term2(int));
+    quotient(int) = (term1(int) / term2(int));
+    sum(int) = (term1(int) + term2(int));
+    minus(int) = (term1(int) - term2(int));
+    return sum(int);
+}
+
+int structNumericExpressions(int term1, int term2) {
+    int product;
+    int quotient;
+    int sum;
+    int minus;
+    struct myStruct mS;
+    mS(myStruct).x(int) = term1(int);
+    mS(myStruct).y(int) = term2(int);
+    product(int) = (mS(myStruct).x(int) * mS(myStruct).y(int));
+    quotient(int) = (mS(myStruct).x(int) / mS(myStruct).y(int));
+    sum(int) = (mS(myStruct).x(int) + mS(myStruct).y(int));
+    minus(int) = (mS(myStruct).x(int) - mS(myStruct).y(int));
+    return sum(int);
+}
+
+bool binaryLogicalExpressions(bool log1, bool log2) {
+    bool and;
+    bool or;
+    log1(bool) = false;
+    log2(bool) = true;
+    and(bool) = (log1(bool) && log2(bool));
+    or(bool) = (log1(bool) || log2(bool));
+    return and(bool);
+}
+
+bool structLogicalExpressions(bool term1, bool term2) {
+    struct myStruct mS1;
+    struct myStruct mS2;
+    bool and;
+    bool or;
+    mS1(myStruct).z(bool) = term1(bool);
+    mS2(myStruct).z(bool) = term2(bool);
+    and(bool) = (mS1(myStruct).z(bool) && mS2(myStruct).z(bool));
+    or(bool) = (mS1(myStruct).z(bool) || mS2(myStruct).z(bool));
+    return and(bool);
+}
+
+int binaryRelationalExpressions(int term1, int term2) {
+    if ((term1(int) > term2(int))) {
+        return term1(int);
+    }
+    if ((term1(int) < term2(int))) {
+        return term2(int);
+    }
+    if ((term1(int) >= term2(int))) {
+        return (term1(int) + term2(int));
+    }
+    if ((term1(int) >= term2(int))) {
+        return (term1(int) - term2(int));
+    }
+    return (term1(int) * term2(int));
+}
+
+int unaryNumericExpression(int term1) {
+    int negate;
+    int a;
+    a(int) = 5;
+    negate(int) = (-a(int));
+    a(int)++;
+    a(int)--;
+    return a(int);
+}
+
+bool unaryLogicalExpression(bool term1) {
+    return (!term1(bool));
+}
+
+bool binaryEqualityNumericExpressions(int term1, int term2) {
+    if ((term1(int) == term2(int))) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool binaryEqualityLogicalExpressions(bool term1, bool term2) {
+    if ((term1(bool) == term2(bool))) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool binaryNonEqualityNumericExpressions(int term1, int term2) {
+    if ((term1(int) != term2(int))) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool binaryNonEqualityLogicalExpressions(bool term1, bool term2) {
+    if ((term1(bool) != term2(bool))) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+void testChainOps(int a, int b, bool c, bool d) {
+    int numerical;
+    bool logical;
+    numerical(int) = (((a(int) + b(int)) + (b(int) * a(int))) - (-(b(int) * 5)));
+    logical(bool) = (((c(bool) || d(bool)) && (!c(bool))) || d(bool));
+    logical(bool) = ((a(int) > b(int)) && (b(int) > a(int)));
+}
+
+int main() {
+    int a;
+    bool b;
+    a(int) = 1;
+    b(bool) = true;
+    a(int) = (1 + 5);
+    f(int,int->int)(a(int), 5);
+    return a(int);
+}
+

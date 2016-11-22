@@ -1,0 +1,289 @@
+struct myStruct{
+    int x;
+    int y;
+    bool z;
+};
+
+struct anotherStruct{
+    int x;
+    int y;
+    bool z;
+};
+
+void returnFromVoid() {
+    return 5;
+}
+
+void returnFromVoidAgainWith2Errors() {
+    return (3 + true);
+}
+
+void voidFunc() {
+}
+
+int intFunc(int a) {
+    return a(int);
+}
+
+int intFuncWithMultipleParams(int a, int b) {
+    return (a(int) + b(int));
+}
+
+bool boolFunc(bool a) {
+    return a(bool);
+}
+
+int returnBoolFromIntFunction() {
+    return true;
+}
+
+bool returnIntFromBoolFunction() {
+    return 10;
+}
+
+int missingReturnValue() {
+    int rtnVal;
+    rtnVal(int) = 15;
+    return;
+}
+
+void equalityOpsForMisMatchedTypes(int a, bool b) {
+    if ((a(int) == b(bool))) {
+        a(int)++;
+    }
+    if ((a(int) != b(bool))) {
+    }
+}
+
+void comparisonOpsForVoidFunctions() {
+    if ((voidFunc(->void)() == voidFunc(->void)())) {
+    }
+    if ((voidFunc(->void)() != voidFunc(->void)())) {
+    }
+}
+
+void comparisonOpsForStructVariables() {
+    struct myStruct ms1;
+    struct myStruct ms2;
+    if ((ms1(myStruct) == ms2(myStruct))) {
+    }
+    if ((ms1(myStruct) != ms2(myStruct))) {
+    }
+}
+
+void comparisonOpsForStructNames() {
+    if ((myStruct(struct) == anotherStruct(struct))) {
+    }
+    if ((myStruct(struct) != anotherStruct(struct))) {
+    }
+}
+
+void compareFunctionsForEqualityAndInequality() {
+    if ((boolFunc(bool->bool) == intFunc(int->int))) {
+        int a;
+        a(int) = 5;
+    }
+}
+
+void numericalOperationsWithNonNumericTypes(bool term1, bool term2) {
+    struct myStruct ms;
+    bool product;
+    bool quotient;
+    bool minus;
+    bool sum;
+    sum(bool) = (ms(myStruct) + term1(bool));
+    product(bool) = (term1(bool) * term2(bool));
+    quotient(bool) = (term1(bool) * term2(bool));
+    minus(bool) = (term1(bool) - term2(bool));
+    sum(bool) = (term1(bool) + term2(bool));
+}
+
+void logicalOperationsWithNonBoolTypes(int term1, int term2) {
+    struct myStruct ms;
+    int and;
+    int or;
+    ms(myStruct) = (term1(int) && ms(myStruct));
+    and(int) = (term1(int) && term2(int));
+    or(int) = (term1(int) || term2(int));
+}
+
+void relationalOperationsWithNonNumericTypes(bool term1, bool term2) {
+    struct myStruct ms;
+    bool greaterThan;
+    bool greaterThanEquals;
+    bool lesserThan;
+    bool lesserThanEquals;
+    ms(myStruct) = (term1(bool) > ms(myStruct));
+    greaterThan(bool) = (term1(bool) > term2(bool));
+    greaterThanEquals(bool) = (term1(bool) >= term2(bool));
+    lesserThan(bool) = (term1(bool) < term2(bool));
+    lesserThanEquals(bool) = (term1(bool) <= term2(bool));
+}
+
+void coutErrors() {
+    struct myStruct mS;
+    cout << intFunc(int->int);
+    cout << voidFunc(->void)();
+    cout << myStruct(struct);
+    cout << mS(myStruct);
+    cout << (myStruct(struct) + 1);
+}
+
+void cinErrors() {
+    struct myStruct mS;
+    cin >> boolFunc(bool->bool);
+    cin >> myStruct(struct);
+    cin >> mS(myStruct);
+}
+
+void callFunctionErrors() {
+    int a;
+    bool b;
+    int myExp;
+    a(int)();
+    b(bool)();
+    intFunc(int->int)(5, 6, 7);
+    intFunc(int->int)();
+    intFunc(int->int)(true);
+    boolFunc(bool->bool)(true, true, false);
+    boolFunc(bool->bool)();
+    boolFunc(bool->bool)(1);
+    boolFunc(bool->bool)(1, true, false);
+    myExp(int) = (1 + intFunc(int->int)(true));
+    myExp(int) = (1 + intFuncWithMultipleParams(int,int->int)(1, true));
+    myExp(int) = (1 + intFunc(int->int)((1 + true)));
+}
+
+void unaryOpsOnBadTypes(int a, bool b) {
+    bool bb;
+    bb(bool) = true;
+    a(int) = (!a(int));
+    bb(bool) = (-b(bool));
+    bb(bool)++;
+    bb(bool)--;
+}
+
+void testConditionals() {
+    struct myStruct mS;
+    int a;
+    int b;
+    a(int) = 5;
+    b(int) = 6;
+    if ((5 * 6)) {
+        a(int)--;
+    }
+    if ((-a(int))) {
+    }
+    if ("hello") {
+    }
+    if (mS(myStruct)) {
+    }
+    if (myStruct(struct)) {
+    }
+    if (voidFunc(->void)()) {
+    }
+    if (intFunc(int->int)(1)) {
+    }
+    if ((5 * 6)) {
+        a(int) = b(int);
+    }
+    else {
+        b(int) = a(int);
+    }
+    if ((-a(int))) {
+    }
+    else {
+    }
+    if ("hello") {
+    }
+    else {
+    }
+    if (mS(myStruct)) {
+    }
+    else {
+    }
+    if (myStruct(struct)) {
+    }
+    else {
+    }
+    if (voidFunc(->void)()) {
+    }
+    else {
+    }
+    if (intFunc(int->int)(1)) {
+    }
+    else {
+    }
+    while ((a(int) * 5)) {
+        a(int)++;
+    }
+    while ((-a(int))) {
+    }
+    while ("hello") {
+    }
+    while (mS(myStruct)) {
+    }
+    while (myStruct(struct)) {
+    }
+    while (voidFunc(->void)()) {
+    }
+    while (intFunc(int->int)(1)) {
+    }
+}
+
+void assignWrongType(int a, bool b) {
+    int c;
+    bool d;
+    struct myStruct ms;
+    struct anotherStruct as;
+    c(int) = 0;
+    d(bool) = false;
+    c(int) = b(bool);
+    a(int) = d(bool);
+    ms(myStruct) = a(int);
+    as(anotherStruct) = d(bool);
+    ms(myStruct) = voidFunc(->void)();
+    as(anotherStruct) = intFunc(int->int)(1);
+    ms(myStruct) = boolFunc(bool->bool)(true);
+}
+
+void assignFunctionTypes() {
+    int c;
+    returnBoolFromIntFunction(->int) = intFunc(int->int);
+    c(int) = intFunc(int->int);
+}
+
+void assignStructVarType() {
+    struct myStruct ms;
+    struct anotherStruct as;
+    ms(myStruct) = as(anotherStruct);
+}
+
+void assignStructNameTypes() {
+    anotherStruct(struct) = myStruct(struct);
+}
+
+void binaryOpsOnChainExps(int first, bool second) {
+    int a;
+    int b;
+    bool c;
+    bool d;
+    a(int) = 10;
+    b(int) = 20;
+    c(bool) = false;
+    d(bool) = true;
+    a(int) = ((true || second(bool)) + (second(bool) && true));
+    c(bool) = (((10 * 20) && (5 + a(int))) || (!first(int)));
+    a(int) = ((true + 3) * 4);
+    c(bool) = (d(bool) && (false || 3));
+    a(int) = (1 + intFunc(int->int)(true));
+}
+
+int main() {
+    int a;
+    bool b;
+    a(int) = 5;
+    b(bool) = false;
+    a(int) = b(bool);
+}
+

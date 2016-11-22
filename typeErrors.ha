@@ -44,7 +44,7 @@ bool returnIntFromBoolFunction(){
 int missingReturnValue(){
 	int rtnVal;
 	rtnVal = 15;
-	return; 
+	return;		//missing return value
 }
 
 void equalityOpsForMisMatchedTypes(int a, bool b) {
@@ -125,20 +125,20 @@ void relationalOperationsWithNonNumericTypes(bool term1, bool term2){
 	bool greaterThanEquals;
 	bool lesserThan;
 	bool lesserThanEquals;
-	ms = term1 > ms;		//Arithmetic operator applied to non-numeric operand
-	greaterThan = term1 > term2;	//This should throw an error "Arithmetic operator applied to non-numeric operand"
-	greaterThanEquals = term1 >= term2; //This should throw an error "Arithmetic operator applied to non-numeric operand"
-	lesserThan = term1 < term2;	//This should throw an error "Arithmetic operator applied to non-numeric operand"
-	lesserThanEquals = term1 <= term2; //This should throw an error "Arithmetic operator applied to non-numeric operand"
+	ms = term1 > ms;		//Relational operator applied to non-numeric operand
+	greaterThan = term1 > term2;	//This should throw an error "Relational operator applied to non-numeric operand"
+	greaterThanEquals = term1 >= term2; //This should throw an error "Relational operator applied to non-numeric operand"
+	lesserThan = term1 < term2;	//This should throw an error "Relational operator applied to non-numeric operand"
+	lesserThanEquals = term1 <= term2; //This should throw an error "Relational operator applied to non-numeric operand"
 }
 
 void coutErrors(){
 	struct myStruct mS;
 	cout << intFunc; 	//this should throw an error "Attempt to write a function"
-	cout << voidFunc(); 	//Not throwing error about returning a void value
+	cout << voidFunc(); 	//Attempt to write void
 	cout << myStruct; 	//this should throw an error "Attempt to write a struct name"
 	cout << mS;		//this should throw an error "Attempt to write a struct variable"
-	cout << myStruct + 1;	// Should NOT throw a cout error, just an Arithmetic op error
+	cout << myStruct + 1;	//Arithmetic op error
 }
 
 void cinErrors(){
@@ -153,7 +153,7 @@ void callFunctionErrors(){
 	int a;
 	bool b;
 	int myExp;
-	a();
+	a();			//this should throw an error "Attempt to call a non-function"
 	b(); 			//this should throw an error "Attempt to call a non-function"
 	intFunc(5, 6, 7); 	//this should throw an error "Function call with wrong number of args"
 	intFunc(); 		//this should throw an error "Function call with wrong number of args"
@@ -169,12 +169,12 @@ void callFunctionErrors(){
 }
 
 void unaryOpsOnBadTypes(int a, bool b) {
-	bool b;
-	b = true;
+	bool bb;
+	bb = true;
 	a = !a; //Should throw an error "Logical operator applied to non-bool operand"
-	b = -b; //Should throw an error "Arithmetic operator applied to non-numeric operand"
-	b++; //Should throw an error "Arithmetic operator applied to non-numeric operand"
-	b--; //Should throw an error "Arithmetic operator applied to non-numeric operand"
+	bb = -b; //Should throw an error "Arithmetic operator applied to non-numeric operand"
+	bb++; //Should throw an error "Arithmetic operator applied to non-numeric operand"
+	bb--; //Should throw an error "Arithmetic operator applied to non-numeric operand"
 }
 
 void testConditionals() {
@@ -184,19 +184,19 @@ void testConditionals() {
 	a = 5;
 	b = 6;
 
-	if(5 * 6) { //should throw an error "Non-bool expression used as an if condition"
+	if(5 * 6) { 	//should throw an error "Non-bool expression used as an if condition"
 		a--;
 	}
-	if(-a) {
+	if(-a) {	//should throw an error "Non-bool expression used as an if condition"
 
 	}
-	if("hello") { //should throw an error "Non-bool expression used as an if condition"
+	if("hello") { 	//should throw an error "Non-bool expression used as an if condition"
 
 	}
-	if(mS) { //Should throw and error "Non-bool expression used as an if condition"
+	if(mS) { 	//Should throw an error "Non-bool expression used as an if condition"
 
 	}
-	if(myStruct) { //Should throw and error "Non-bool expression used as an if condition"
+	if(myStruct) { 	//Should throw an error "Non-bool expression used as an if condition"
 
 	}
 	if(voidFunc()) { //should throw an error "Non-bool expression used as an if condition"
@@ -230,10 +230,10 @@ void testConditionals() {
 
 	} else {}
 	
-	while(a * 5) { //should throw an error "Non-bool expression used as a while condition"
+	while(a * 5) { 	//should throw an error "Non-bool expression used as a while condition"
 		a++;
 	}
-	while(-a) {
+	while(-a) {	//should throw an error "Non-bool expression used as a while condition"
 
 	}
 	while("hello") { //should throw an error "Non-bool expression used as a while condition"
@@ -260,29 +260,29 @@ void assignWrongType(int a, bool b) {
 	struct anotherStruct as;
 	c = 0;
 	d = false;
-	c = b;
-	a = d;
-	ms = a;
-	as = d;
-	ms = voidFunc();
-	as = intFunc(1);
-	ms = boolFunc(true);
+	c = b;					//Should throw an error "type mismatch"
+	a = d;					//Should throw an error "type mismatch"
+	ms = a;					//Should throw an error "type mismatch"
+	as = d;					//Should throw an error "type mismatch"
+	ms = voidFunc();			//Should throw an error "type mismatch"
+	as = intFunc(1);			//Should throw an error "type mismatch"
+	ms = boolFunc(true);			//Should throw an error "type mismatch"
 }
 
 void assignFunctionTypes() {
 	int c;
-	returnBoolFromIntFunction = intFunc; //Should throw an error "Function Assignment"
-	c = intFunc; //Should throw an error "type mismatch"
+	returnBoolFromIntFunction = intFunc; 	//Should throw an error "Function Assignment"
+	c = intFunc; 				//Should throw an error "type mismatch"
 }
 
 void assignStructVarType() {
 	struct myStruct ms;
 	struct anotherStruct as;
-	ms = as; //Struct variable Assignment
+	ms = as; 				//Struct variable Assignment
 }
 
 void assignStructNameTypes() {
-	anotherStruct = myStruct; //Struct name assignment
+	anotherStruct = myStruct; 		//Struct name assignment
 }
 
 void binaryOpsOnChainExps(int first, bool second) {
@@ -295,10 +295,10 @@ void binaryOpsOnChainExps(int first, bool second) {
 	c = false;
 	d = true;
 	a = (true || second) + (second && true); //should result in two arithmetic operand errors
-	c = (10 * 20) && (5 + a) || (!first);
-	a = (true + 3) * 4;
-	c = d && (false || 3);
-	a = 1 + intFunc(true);
+	c = (10 * 20) && (5 + a) || (!first);	//logical operator applied to non-bool
+	a = (true + 3) * 4;		//arithmetic op applied to non-numeric
+	c = d && (false || 3);		//logical operator applied to non-bool
+	a = 1 + intFunc(true);		//type of actual does not match type of formal
 }
 
 int main(){
@@ -306,5 +306,5 @@ int main(){
 	bool b;
 	a = 5;
 	b = false;
-	a = b; //type mismatch
+	a = b; 				//type mismatch
 }
