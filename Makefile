@@ -58,6 +58,12 @@ test:
 	java P5 test.ha test.out
 
 ###
+# there example bad input file
+###
+ex:
+	java P5 example.ha example.out
+
+###
 # test for bad input
 ###
 bad:
