@@ -142,8 +142,6 @@ bool testStructVarsOps(){
 	if(mS.x >= 6){
 		return false;
 	}
-
-
 }
 
 
@@ -155,7 +153,6 @@ void cinFn(int a, bool b){
 	cin >> mS.z; 	//boolean variable from dot access
 	cin >> a; 	//regular int variable
 	cin >> b; 	//regular bool variable
-	return;		//testing empty return statement
 }
 
 //check cout function
@@ -205,11 +202,13 @@ int structNumericExpressions(int term1, int term2){
 }
 
 //check that logical expressions are allowed on regular bools
-bool binaryLogicalExpressions(bool term1, bool term2) {
+bool binaryLogicalExpressions(bool log1, bool log2) {
 	bool and;
 	bool or;
-	and = term1 && term2;
-	or = term1 || term2;
+	log1 = false;
+	log2 = true;
+	and = log1 && log2;
+	or = log1 || log2;
 	return and;
 }
 
@@ -290,6 +289,14 @@ bool binaryNonEqualityLogicalExpressions(bool term1, bool term2) {
 	} else {
 		return false;
 	}
+}
+
+void testChainOps(int a, int b, bool c, bool d){
+	int numerical;
+	bool logical;
+	numerical = (a + b) + (b * a) - (-b * 5);
+	logical = (c || d) && (!c) || d;
+	logical = (a > b) && (b > a);
 }
 
 int main(){
